@@ -7,6 +7,7 @@ use crate::SshResult;
 
 use super::{hash::HashCtx, mac::MacNone, Enc};
 use chacha20poly1305::aead::stream::{NewStream, StreamPrimitive};
+use crypto::cipher::{BlockSizeUser, IvSizeUser};
 
 /// # 加密算法
 /// 在密钥交互中将协商出一种加密算法和一个密钥。当加密生效时，每个数据包的数据包长度、填
@@ -16,11 +17,11 @@ use chacha20poly1305::aead::stream::{NewStream, StreamPrimitive};
 /// 钥。
 /// 两个方向上的加密器必须独立运行。如果本地策略允许多种算法，系统实现必须允许独立选择每
 /// 个方向上的算法。但是，在实际使用中，推荐在两个方向上使用相同的算法。
-pub(crate) trait Encryption: Send + Sync {
+pub(crate) trait Encryption: Send + Sync + BlockSizeUser + IvSizeUser {
     fn bsize(&self) -> usize;
     fn iv_size(&self) -> usize;
     fn group_size(&self) -> usize;
-    fn new(hash: Hash, mac: Box<dyn Mac>) -> Self
+    fn new(hash: Hash, mac: Box<dyn Mac<OutputSize=()>>) -> Self
     where
         Self: Sized;
     fn encrypt(&mut self, client_sequence_num: u32, buf: &mut Vec<u8>);

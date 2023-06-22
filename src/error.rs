@@ -10,7 +10,7 @@ pub type SshResult<I> = Result<I, CrateError>;
 
 #[derive(Debug, Error)]
 pub enum CrateError {
-    #[error("SSH error: {0]")]
+    #[error("SSH error: {0}")]
     SSH(#[from] SshError),
     #[error("Other: {0}")]
     Other(#[from] anyhow::Error),
