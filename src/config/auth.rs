@@ -2,10 +2,13 @@ use crate::algorithm::{
     hash::{self, HashCtx, HashType},
     PubKey,
 };
+use crate::error::CrateError;
 use crate::model::Data;
 use crate::{SshError, SshResult};
 use rsa::pkcs1::DecodeRsaPrivateKey;
 use rsa::PublicKeyParts;
+use ssh_key::Algorithm;
+use ssh_key::PrivateKey;
 use std::fmt::Debug;
 use std::fs::File;
 use std::io::Read;
@@ -211,7 +214,7 @@ impl AuthInfo {
     {
         let mut file = match File::open(p) {
             Ok(file) => file,
-            Err(e) => return Err(SshError::from(e.to_string())),
+            Err(e) => return Err(CrateError::from(e.to_string())?),
         };
         let mut prks = String::new();
         file.read_to_string(&mut prks)?;

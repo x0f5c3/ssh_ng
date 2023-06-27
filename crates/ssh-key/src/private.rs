@@ -10,8 +10,7 @@
 //! When the `encryption` feature of this crate is enabled, it's possible to
 //! decrypt keys which have been encrypted under a password:
 //!
-#![cfg_attr(all(feature = "encryption", feature = "std"), doc = " ```")]
-#![cfg_attr(not(all(feature = "encryption", feature = "std")), doc = " ```ignore")]
+//! ```
 //! # fn main() -> Result<(), Box<dyn std::error::Error>> {
 //! use ssh_key::PrivateKey;
 //!
@@ -37,7 +36,7 @@
 //! assert!(!decrypted_key.is_encrypted());
 //! # Ok(())
 //! # }
-#![doc="```"]
+//! ```
 //!
 //! ## Encrypting plaintext private keys
 //!
@@ -46,24 +45,25 @@
 //!
 //! The example below also requires enabling this crate's `getrandom` feature.
 //!
-#![cfg_attr(
-    all(
-        feature = "ed25519",
-        feature = "encryption",
-        feature = "getrandom",
-        feature = "std"
-    ),
-    doc = " ```"
-)]
-#![cfg_attr(
-    not(all(
-        feature = "ed25519",
-        feature = "encryption",
-        feature = "getrandom",
-        feature = "std"
-    )),
-    doc = " ```ignore"
-)]
+// #![cfg_attr(
+//     all(
+//         feature = "ed25519",
+//         feature = "encryption",
+//         feature = "getrandom",
+//         feature = "std"
+//     ),
+//     doc = " ```"
+// )]
+// #![cfg_attr(
+//     not(all(
+//         feature = "ed25519",
+//         feature = "encryption",
+//         feature = "getrandom",
+//         feature = "std"
+//     )),
+//     doc = " ```ignore"
+// )]
+//! ```
 //! # fn main() -> Result<(), Box<dyn std::error::Error>> {
 //! use ssh_key::{Algorithm, PrivateKey, rand_core::OsRng};
 //!
@@ -77,7 +77,8 @@
 //! assert!(encrypted_key.is_encrypted());
 //! # Ok(())
 //! # }
-#![doc="```"]
+//! ```
+// #![doc = "```"]
 //!
 //! ## Generating random keys
 //!
@@ -88,14 +89,7 @@
 //! well as the crate feature identified in backticks in the title of each
 //! example.
 //!
-#![cfg_attr(
-    all(feature = "ed25519", feature = "getrandom", feature = "std"),
-    doc = " ```"
-)]
-#![cfg_attr(
-    not(all(feature = "ed25519", feature = "getrandom", feature = "std")),
-    doc = " ```ignore"
-)]
+//! ```
 //! # fn main() -> Result<(), Box<dyn std::error::Error>> {
 //! use ssh_key::{Algorithm, PrivateKey, rand_core::OsRng};
 //!
@@ -104,15 +98,15 @@
 //! # }
 //! ```
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 mod dsa;
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 mod ecdsa;
 mod ed25519;
 mod keypair;
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 mod rsa;
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 mod sk;
 
 pub use self::{
@@ -120,7 +114,7 @@ pub use self::{
     keypair::KeypairData,
 };
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 pub use crate::{
     private::{
         dsa::{DsaKeypair, DsaPrivateKey},
@@ -130,7 +124,7 @@ pub use crate::{
     SshSig,
 };
 
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 pub use self::ecdsa::{EcdsaKeypair, EcdsaPrivateKey};
 
 #[cfg(all(feature = "alloc", feature = "ecdsa"))]
@@ -145,16 +139,16 @@ use encoding::{
 };
 use subtle::{Choice, ConstantTimeEq};
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 use {
     alloc::{string::String, vec::Vec},
     zeroize::Zeroizing,
 };
 
-#[cfg(feature = "rand_core")]
+// #[cfg(feature = "rand_core")]
 use rand_core::CryptoRngCore;
 
-#[cfg(feature = "std")]
+// #[cfg(feature = "std")]
 use std::{fs, path::Path};
 
 #[cfg(all(unix, feature = "std"))]
@@ -176,7 +170,7 @@ const MAX_BLOCK_SIZE: usize = 16;
 const PADDING_BYTES: [u8; MAX_BLOCK_SIZE - 1] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
 
 /// Unix file permissions for SSH private keys.
-#[cfg(all(unix, feature = "std"))]
+#[cfg(unix)]
 const UNIX_FILE_PERMISSIONS: u32 = 0o600;
 
 /// SSH private key.
@@ -208,7 +202,7 @@ impl PrivateKey {
     /// Create a new unencrypted private key with the given keypair data and comment.
     ///
     /// On `no_std` platforms, use `PrivateKey::from(key_data)` instead.
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     pub fn new(key_data: KeypairData, comment: impl Into<String>) -> Result<Self> {
         if key_data.is_encrypted() {
             return Err(Error::Encrypted);
@@ -248,13 +242,13 @@ impl PrivateKey {
 
     /// Encode an OpenSSH-formatted PEM private key, allocating a
     /// self-zeroizing [`String`] for the result.
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     pub fn to_openssh(&self, line_ending: LineEnding) -> Result<Zeroizing<String>> {
         Ok(self.encode_pem_string(line_ending).map(Zeroizing::new)?)
     }
 
     /// Serialize SSH private key as raw bytes.
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     pub fn to_bytes(&self) -> Result<Zeroizing<Vec<u8>>> {
         let mut private_key_bytes = Vec::with_capacity(self.encoded_len()?);
         self.encode(&mut private_key_bytes)?;
@@ -273,13 +267,13 @@ impl PrivateKey {
     /// See [PROTOCOL.sshsig] for more information.
     ///
     /// [PROTOCOL.sshsig]: https://cvsweb.openbsd.org/src/usr.bin/ssh/PROTOCOL.sshsig?annotate=HEAD
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     pub fn sign(&self, namespace: &str, hash_alg: HashAlg, msg: &[u8]) -> Result<SshSig> {
         SshSig::sign(self, namespace, hash_alg, msg)
     }
 
     /// Read private key from an OpenSSH-formatted PEM file.
-    #[cfg(feature = "std")]
+    // #[cfg(feature = "std")]
     pub fn read_openssh_file(path: &Path) -> Result<Self> {
         // TODO(tarcieri): verify file permissions match `UNIX_FILE_PERMISSIONS`
         let pem = Zeroizing::new(fs::read_to_string(path)?);
@@ -287,7 +281,7 @@ impl PrivateKey {
     }
 
     /// Write private key as an OpenSSH-formatted PEM file.
-    #[cfg(feature = "std")]
+    // #[cfg(feature = "std")]
     pub fn write_openssh_file(&self, path: &Path, line_ending: LineEnding) -> Result<()> {
         let pem = self.to_openssh(line_ending)?;
 
@@ -309,7 +303,7 @@ impl PrivateKey {
     /// password to derive an encryption key.
     ///
     /// Returns [`Error::Decrypted`] if the private key is already decrypted.
-    #[cfg(feature = "encryption")]
+    // #[cfg(feature = "encryption")]
     pub fn decrypt(&self, password: impl AsRef<[u8]>) -> Result<Self> {
         let (key, iv) = self.kdf.derive_key_and_iv(self.cipher, password)?;
 
@@ -332,7 +326,7 @@ impl PrivateKey {
     /// - KDF: [`Kdf::Bcrypt`] (i.e. `bcrypt-pbkdf`)
     ///
     /// Returns [`Error::Encrypted`] if the private key is already encrypted.
-    #[cfg(feature = "encryption")]
+    // #[cfg(feature = "encryption")]
     pub fn encrypt(
         &self,
         rng: &mut impl CryptoRngCore,
@@ -345,7 +339,7 @@ impl PrivateKey {
     /// derive an encryption key for the provided [`Cipher`].
     ///
     /// Returns [`Error::Encrypted`] if the private key is already encrypted.
-    #[cfg(feature = "encryption")]
+    // #[cfg(feature = "encryption")]
     pub fn encrypt_with_cipher(
         &self,
         rng: &mut impl CryptoRngCore,
@@ -366,7 +360,7 @@ impl PrivateKey {
     /// configuration.
     ///
     /// Returns [`Error::Encrypted`] if the private key is already encrypted.
-    #[cfg(feature = "encryption")]
+    // #[cfg(feature = "encryption")]
     pub fn encrypt_with(
         &self,
         cipher: Cipher,
@@ -446,18 +440,18 @@ impl PrivateKey {
     ///
     /// # Returns
     /// - `Error::AlgorithmUnknown` if the algorithm is unsupported.
-    #[cfg(feature = "rand_core")]
+    // #[cfg(feature = "rand_core")]
     #[allow(unreachable_code, unused_variables)]
     pub fn random(rng: &mut impl CryptoRngCore, algorithm: Algorithm) -> Result<Self> {
         let checkint = rng.next_u32();
         let key_data = match algorithm {
-            #[cfg(feature = "dsa")]
+            // #[cfg(feature = "dsa")]
             Algorithm::Dsa => KeypairData::from(DsaKeypair::random(rng)?),
             #[cfg(any(feature = "p256", feature = "p384"))]
             Algorithm::Ecdsa { curve } => KeypairData::from(EcdsaKeypair::random(rng, curve)?),
-            #[cfg(feature = "ed25519")]
+            // #[cfg(feature = "ed25519")]
             Algorithm::Ed25519 => KeypairData::from(Ed25519Keypair::random(rng)),
-            #[cfg(feature = "rsa")]
+            // #[cfg(feature = "rsa")]
             Algorithm::Rsa { .. } => {
                 KeypairData::from(RsaKeypair::random(rng, DEFAULT_RSA_KEY_SIZE)?)
             }
@@ -476,7 +470,7 @@ impl PrivateKey {
     }
 
     /// Set the comment on the key.
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     pub fn set_comment(&mut self, comment: impl Into<String>) {
         self.public_key.set_comment(comment);
     }
@@ -657,7 +651,7 @@ impl Decode for PrivateKey {
         if cipher.is_some() {
             return Err(Error::Encrypted);
         }
-        #[cfg(feature = "alloc")]
+        // #[cfg(feature = "alloc")]
         if cipher.is_some() {
             let ciphertext = Vec::decode(reader)?;
 
@@ -775,7 +769,7 @@ impl From<&PrivateKey> for public::KeyData {
     }
 }
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 impl From<DsaKeypair> for PrivateKey {
     fn from(keypair: DsaKeypair) -> PrivateKey {
         KeypairData::from(keypair)
@@ -784,7 +778,7 @@ impl From<DsaKeypair> for PrivateKey {
     }
 }
 
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 impl From<EcdsaKeypair> for PrivateKey {
     fn from(keypair: EcdsaKeypair) -> PrivateKey {
         KeypairData::from(keypair)
@@ -801,7 +795,7 @@ impl From<Ed25519Keypair> for PrivateKey {
     }
 }
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 impl From<RsaKeypair> for PrivateKey {
     fn from(keypair: RsaKeypair) -> PrivateKey {
         KeypairData::from(keypair)
@@ -819,7 +813,7 @@ impl From<SkEcdsaSha2NistP256> for PrivateKey {
     }
 }
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 impl From<SkEd25519> for PrivateKey {
     fn from(keypair: SkEd25519) -> PrivateKey {
         KeypairData::from(keypair)

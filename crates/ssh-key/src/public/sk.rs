@@ -6,10 +6,10 @@ use super::Ed25519PublicKey;
 use crate::{Error, Result};
 use encoding::{CheckedSum, Decode, Encode, Reader, Writer};
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 use alloc::{borrow::ToOwned, string::String};
 
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 use crate::{public::ecdsa::EcdsaNistP256PublicKey, EcdsaCurve};
 
 /// Default FIDO/U2F Security Key application string.
@@ -17,18 +17,18 @@ const DEFAULT_APPLICATION_STRING: &str = "ssh:";
 
 /// Security Key (FIDO/U2F) ECDSA/NIST P-256 public key as specified in
 /// [PROTOCOL.u2f](https://cvsweb.openbsd.org/src/usr.bin/ssh/PROTOCOL.u2f?annotate=HEAD).
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 #[derive(Clone, Debug, Eq, PartialEq, PartialOrd, Ord)]
 pub struct SkEcdsaSha2NistP256 {
     /// Elliptic curve point representing a public key.
     ec_point: EcdsaNistP256PublicKey,
 
     /// FIDO/U2F application (typically `ssh:`)
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     application: String,
 }
 
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 impl SkEcdsaSha2NistP256 {
     /// Get the elliptic curve point for this Security Key.
     pub fn ec_point(&self) -> &EcdsaNistP256PublicKey {
@@ -42,13 +42,13 @@ impl SkEcdsaSha2NistP256 {
     }
 
     /// Get the FIDO/U2F application (typically `ssh:`).
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     pub fn application(&self) -> &str {
         &self.application
     }
 }
 
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 impl Decode for SkEcdsaSha2NistP256 {
     type Error = Error;
 
@@ -66,14 +66,13 @@ impl Decode for SkEcdsaSha2NistP256 {
 
         Ok(Self {
             ec_point,
-
-            #[cfg(feature = "alloc")]
+            // #[cfg(feature = "alloc")]
             application: String::decode(reader)?,
         })
     }
 }
 
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 impl Encode for SkEcdsaSha2NistP256 {
     fn encoded_len(&self) -> encoding::Result<usize> {
         [
@@ -92,18 +91,18 @@ impl Encode for SkEcdsaSha2NistP256 {
     }
 }
 
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 impl From<EcdsaNistP256PublicKey> for SkEcdsaSha2NistP256 {
     fn from(ec_point: EcdsaNistP256PublicKey) -> SkEcdsaSha2NistP256 {
         SkEcdsaSha2NistP256 {
             ec_point,
-            #[cfg(feature = "alloc")]
+            // #[cfg(feature = "alloc")]
             application: DEFAULT_APPLICATION_STRING.to_owned(),
         }
     }
 }
 
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 impl From<SkEcdsaSha2NistP256> for EcdsaNistP256PublicKey {
     fn from(sk: SkEcdsaSha2NistP256) -> EcdsaNistP256PublicKey {
         sk.ec_point
@@ -118,7 +117,7 @@ pub struct SkEd25519 {
     public_key: Ed25519PublicKey,
 
     /// FIDO/U2F application (typically `ssh:`)
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     application: String,
 }
 
@@ -135,7 +134,7 @@ impl SkEd25519 {
     }
 
     /// Get the FIDO/U2F application (typically `ssh:`).
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     pub fn application(&self) -> &str {
         &self.application
     }
@@ -153,8 +152,7 @@ impl Decode for SkEd25519 {
 
         Ok(Self {
             public_key,
-
-            #[cfg(feature = "alloc")]
+            // #[cfg(feature = "alloc")]
             application: String::decode(reader)?,
         })
     }
@@ -180,7 +178,7 @@ impl From<Ed25519PublicKey> for SkEd25519 {
     fn from(public_key: Ed25519PublicKey) -> SkEd25519 {
         SkEd25519 {
             public_key,
-            #[cfg(feature = "alloc")]
+            // #[cfg(feature = "alloc")]
             application: DEFAULT_APPLICATION_STRING.to_owned(),
         }
     }

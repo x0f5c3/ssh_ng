@@ -37,8 +37,7 @@
 //!
 //! #### Example
 //!
-#![cfg_attr(feature = "std", doc = "```")]
-#![cfg_attr(not(feature = "std"), doc = "```ignore")]
+//! ```
 //! # fn main() -> Result<(), Box<dyn std::error::Error>> {
 //! use ssh_key::PublicKey;
 //!
@@ -62,7 +61,7 @@
 //! }
 //! # Ok(())
 //! # }
-#![doc="```"]
+//! ```
 //!
 //! ### Parsing OpenSSH Private Keys
 //!
@@ -76,8 +75,7 @@
 //!
 //! #### Example
 //!
-#![cfg_attr(feature = "std", doc = " ```")]
-#![cfg_attr(not(feature = "std"), doc = " ```ignore")]
+//! ```
 //! # fn main() -> Result<(), Box<dyn std::error::Error>> {
 //! use ssh_key::PrivateKey;
 //!
@@ -120,7 +118,7 @@
 //! }
 //! # Ok(())
 //! # }
-#![doc="```"]
+//! ```
 //!
 //! ## `serde` support
 //!
@@ -134,13 +132,12 @@
 //!
 //!
 
-#[cfg(all(feature = "alloc", feature = "serde"))]
 macro_rules! impl_serde {
     ($typ: ident) => {
         impl<'de> serde::Deserialize<'de> for $typ {
             fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
             where
-                 D: de::Deserializer<'de>,
+                D: de::Deserializer<'de>,
             {
                 if deserializer.is_human_readable() {
                     let string = String::deserialize(deserializer)?;
@@ -170,19 +167,19 @@ macro_rules! impl_serde {
     };
 }
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 #[macro_use]
 extern crate alloc;
-#[cfg(feature = "std")]
+// #[cfg(feature = "std")]
 extern crate std;
 
 pub mod authorized_keys;
 pub mod private;
 pub mod public;
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 pub mod certificate;
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 pub mod known_hosts;
 
 mod algorithm;
@@ -190,11 +187,11 @@ mod error;
 mod fingerprint;
 mod kdf;
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 mod mpint;
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 mod signature;
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 mod sshsig;
 
 pub use crate::{
@@ -210,7 +207,7 @@ pub use cipher::Cipher;
 pub use encoding::LineEnding;
 pub use sha2;
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 pub use crate::{
     certificate::Certificate,
     known_hosts::KnownHosts,
@@ -219,8 +216,8 @@ pub use crate::{
     sshsig::SshSig,
 };
 
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 pub use sec1;
 
-#[cfg(feature = "rand_core")]
+// #[cfg(feature = "rand_core")]
 pub use rand_core;

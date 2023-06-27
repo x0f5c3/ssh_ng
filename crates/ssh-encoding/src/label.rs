@@ -1,9 +1,9 @@
 //! Convenience trait for decoding/encoding string labels.
 
 use crate::{Decode, Encode, Error, Reader, Writer};
-use core::{fmt, str::FromStr};
+use core::{str::FromStr};
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 use alloc::string::String;
 
 /// Maximum size of any algorithm name/identifier.
@@ -34,11 +34,12 @@ impl<T: Label> Encode for T {
 }
 
 /// Errors related to labels.
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq, thiserror::Error)]
+#[error("{label} is invalid")]
 #[non_exhaustive]
 pub struct LabelError {
     /// The label that was considered invalid.
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     label: String,
 }
 
@@ -47,7 +48,7 @@ impl LabelError {
     #[cfg_attr(not(feature = "alloc"), allow(unused_variables))]
     pub fn new(label: &str) -> Self {
         Self {
-            #[cfg(feature = "alloc")]
+            // #[cfg(feature = "alloc")]
             label: label.into(),
         }
     }
@@ -55,28 +56,28 @@ impl LabelError {
     /// The invalid label string (if available).
     #[inline]
     pub fn label(&self) -> &str {
-        #[cfg(not(feature = "alloc"))]
-        {
-            ""
-        }
-        #[cfg(feature = "alloc")]
+        // #[cfg(not(feature = "alloc"))]
+        // {
+        //     ""
+        // }
+        // #[cfg(feature = "alloc")]
         {
             &self.label
         }
     }
 }
 
-impl fmt::Display for LabelError {
-    #[cfg(not(feature = "alloc"))]
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.write_str("invalid label")
-    }
+// impl fmt::Display for LabelError {
+//     // #[cfg(not(feature = "alloc"))]
+//     // fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+//     //     f.write_str("invalid label")
+//     // }
+// 
+//     // #[cfg(feature = "alloc")]
+//     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+//         write!(f, "invalid label: '{}'", self.label)
+//     }
+// }
 
-    #[cfg(feature = "alloc")]
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "invalid label: '{}'", self.label)
-    }
-}
-
-#[cfg(feature = "std")]
-impl std::error::Error for LabelError {}
+// #[cfg(feature = "std")]
+// impl std::error::Error for LabelError {}

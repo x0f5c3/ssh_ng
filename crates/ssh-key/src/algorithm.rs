@@ -3,8 +3,10 @@
 use crate::{Error, Result};
 use core::{fmt, str};
 use encoding::{Label, LabelError};
+use signature::digest::{Output, OutputSizeUser};
+use std::marker::PhantomData;
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 use {
     alloc::vec::Vec,
     sha2::{Digest, Sha256, Sha512},
@@ -57,8 +59,9 @@ const RSA_SHA2_256: &str = "rsa-sha2-256";
 /// RSA with SHA-512 as described in RFC8332 § 3
 const RSA_SHA2_512: &str = "rsa-sha2-512";
 
-const BLAKE3: &str = "blake3";
+const RSA_BLAKE3: &str = "rsa-blake3";
 
+const BLAKE3: &str = "blake3";
 
 /// SHA-256 hash function
 const SHA256: &str = "sha256";
@@ -187,6 +190,7 @@ impl Algorithm {
                 None => SSH_RSA,
                 Some(HashAlg::Sha256) => RSA_SHA2_256,
                 Some(HashAlg::Sha512) => RSA_SHA2_512,
+                Some(HashAlg::Blake3) => RSA_BLAKE3,
             },
             Algorithm::SkEcdsaSha2NistP256 => SK_ECDSA_SHA2_P256,
             Algorithm::SkEd25519 => SK_SSH_ED25519,
@@ -321,7 +325,7 @@ impl EcdsaCurve {
     }
 
     /// Get the number of bytes needed to encode a field element for this curve.
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     pub(crate) const fn field_size(self) -> usize {
         match self {
             EcdsaCurve::NistP256 => 32,
@@ -365,7 +369,6 @@ pub enum HashAlg {
     /// SHA-256
     #[default]
     Sha256,
-
     /// SHA-512
     Sha512,
     Blake3,
@@ -378,6 +381,7 @@ impl HashAlg {
     ///
     /// - `sha256`
     /// - `sha512`
+    /// - `blake3`
     pub fn new(id: &str) -> Result<Self> {
         Ok(id.parse()?)
     }
@@ -387,7 +391,7 @@ impl HashAlg {
         match self {
             HashAlg::Sha256 => SHA256,
             HashAlg::Sha512 => SHA512,
-            HashAlg::Blake3 => "blake3"
+            HashAlg::Blake3 => "blake3",
         }
     }
 
@@ -401,12 +405,12 @@ impl HashAlg {
     }
 
     /// Compute a digest of the given message using this hash function.
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     pub fn digest(self, msg: &[u8]) -> Vec<u8> {
         match self {
             HashAlg::Sha256 => Sha256::digest(msg).to_vec(),
             HashAlg::Sha512 => Sha512::digest(msg).to_vec(),
-            HashAlg::Blake3 => blake3::hash(msg).as_bytes().to_vec()
+            HashAlg::Blake3 => blake3::hash(msg).as_bytes().to_vec(),
         }
     }
 }
@@ -464,7 +468,7 @@ impl KdfAlg {
         match self {
             Self::None => NONE,
             Self::Bcrypt => BCRYPT,
-            Self::Argon2 =>
+            Self::Argon2 => ARGON,
         }
     }
 

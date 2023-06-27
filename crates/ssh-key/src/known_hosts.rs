@@ -10,7 +10,7 @@ use {
     core::fmt,
 };
 
-#[cfg(feature = "std")]
+// #[cfg(feature = "std")]
 use std::{fs, path::Path};
 
 /// Character that begins a comment
@@ -59,7 +59,7 @@ impl<'a> KnownHosts<'a> {
 
     /// Read a [`KnownHosts`] file from the filesystem, returning an
     /// [`Entry`] vector on success.
-    #[cfg(feature = "std")]
+    // #[cfg(feature = "std")]
     pub fn read_file(path: impl AsRef<Path>) -> Result<Vec<Entry>> {
         // TODO(tarcieri): permissions checks
         let input = fs::read_to_string(path)?;

@@ -9,7 +9,7 @@ use encoding::{CheckedSum, Decode, Encode, Reader, Writer};
 use subtle::{Choice, ConstantTimeEq};
 use zeroize::{Zeroize, Zeroizing};
 
-#[cfg(feature = "rand_core")]
+// #[cfg(feature = "rand_core")]
 use rand_core::CryptoRngCore;
 
 /// Ed25519 private key.
@@ -22,7 +22,7 @@ impl Ed25519PrivateKey {
     pub const BYTE_SIZE: usize = 32;
 
     /// Generate a random Ed25519 private key.
-    #[cfg(feature = "rand_core")]
+    // #[cfg(feature = "rand_core")]
     pub fn random(rng: &mut impl CryptoRngCore) -> Self {
         let mut key_bytes = [0u8; Self::BYTE_SIZE];
         rng.fill_bytes(&mut key_bytes);
@@ -98,42 +98,42 @@ impl Drop for Ed25519PrivateKey {
     }
 }
 
-#[cfg(feature = "ed25519")]
+// #[cfg(feature = "ed25519")]
 impl From<Ed25519PrivateKey> for ed25519_dalek::SigningKey {
     fn from(key: Ed25519PrivateKey) -> ed25519_dalek::SigningKey {
         ed25519_dalek::SigningKey::from(&key)
     }
 }
 
-#[cfg(feature = "ed25519")]
+// #[cfg(feature = "ed25519")]
 impl From<&Ed25519PrivateKey> for ed25519_dalek::SigningKey {
     fn from(key: &Ed25519PrivateKey) -> ed25519_dalek::SigningKey {
         ed25519_dalek::SigningKey::from_bytes(key.as_ref())
     }
 }
 
-#[cfg(feature = "ed25519")]
+// #[cfg(feature = "ed25519")]
 impl From<ed25519_dalek::SigningKey> for Ed25519PrivateKey {
     fn from(key: ed25519_dalek::SigningKey) -> Ed25519PrivateKey {
         Ed25519PrivateKey::from(&key)
     }
 }
 
-#[cfg(feature = "ed25519")]
+// #[cfg(feature = "ed25519")]
 impl From<&ed25519_dalek::SigningKey> for Ed25519PrivateKey {
     fn from(key: &ed25519_dalek::SigningKey) -> Ed25519PrivateKey {
         Ed25519PrivateKey(key.to_bytes())
     }
 }
 
-#[cfg(feature = "ed25519")]
+// #[cfg(feature = "ed25519")]
 impl From<Ed25519PrivateKey> for Ed25519PublicKey {
     fn from(private: Ed25519PrivateKey) -> Ed25519PublicKey {
         Ed25519PublicKey::from(&private)
     }
 }
 
-#[cfg(feature = "ed25519")]
+// #[cfg(feature = "ed25519")]
 impl From<&Ed25519PrivateKey> for Ed25519PublicKey {
     fn from(private: &Ed25519PrivateKey) -> Ed25519PublicKey {
         ed25519_dalek::SigningKey::from(private)
@@ -159,13 +159,13 @@ impl Ed25519Keypair {
     pub const BYTE_SIZE: usize = 64;
 
     /// Generate a random Ed25519 private keypair.
-    #[cfg(feature = "ed25519")]
+    // #[cfg(feature = "ed25519")]
     pub fn random(rng: &mut impl CryptoRngCore) -> Self {
         Ed25519PrivateKey::random(rng).into()
     }
 
     /// Expand a keypair from a 32-byte seed value.
-    #[cfg(feature = "ed25519")]
+    // #[cfg(feature = "ed25519")]
     pub fn from_seed(seed: &[u8; Ed25519PrivateKey::BYTE_SIZE]) -> Self {
         Ed25519PrivateKey::from_bytes(seed).into()
     }
@@ -179,7 +179,7 @@ impl Ed25519Keypair {
         let public = Ed25519PublicKey::try_from(pub_bytes)?;
 
         // Validate the public key if possible
-        #[cfg(feature = "ed25519")]
+        // #[cfg(feature = "ed25519")]
         if Ed25519PublicKey::from(&private) != public {
             return Err(Error::Crypto);
         }
@@ -281,7 +281,7 @@ impl fmt::Debug for Ed25519Keypair {
     }
 }
 
-#[cfg(feature = "ed25519")]
+// #[cfg(feature = "ed25519")]
 impl From<Ed25519PrivateKey> for Ed25519Keypair {
     fn from(private: Ed25519PrivateKey) -> Ed25519Keypair {
         let secret = ed25519_dalek::SigningKey::from(&private);
@@ -290,7 +290,7 @@ impl From<Ed25519PrivateKey> for Ed25519Keypair {
     }
 }
 
-#[cfg(feature = "ed25519")]
+// #[cfg(feature = "ed25519")]
 impl TryFrom<Ed25519Keypair> for ed25519_dalek::SigningKey {
     type Error = Error;
 
@@ -299,7 +299,7 @@ impl TryFrom<Ed25519Keypair> for ed25519_dalek::SigningKey {
     }
 }
 
-#[cfg(feature = "ed25519")]
+// #[cfg(feature = "ed25519")]
 impl TryFrom<&Ed25519Keypair> for ed25519_dalek::SigningKey {
     type Error = Error;
 
@@ -315,14 +315,14 @@ impl TryFrom<&Ed25519Keypair> for ed25519_dalek::SigningKey {
     }
 }
 
-#[cfg(feature = "ed25519")]
+// #[cfg(feature = "ed25519")]
 impl From<ed25519_dalek::SigningKey> for Ed25519Keypair {
     fn from(key: ed25519_dalek::SigningKey) -> Ed25519Keypair {
         Ed25519Keypair::from(&key)
     }
 }
 
-#[cfg(feature = "ed25519")]
+// #[cfg(feature = "ed25519")]
 impl From<&ed25519_dalek::SigningKey> for Ed25519Keypair {
     fn from(key: &SigningKey) -> Ed25519Keypair {
         Ed25519Keypair {

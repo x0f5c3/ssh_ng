@@ -4,12 +4,12 @@
 //! [RFC4251 § 5]: https://datatracker.ietf.org/doc/html/rfc4251#section-5
 
 use crate::{checked::CheckedSum, writer::Writer, Error};
-use core::str;
+use std::str;
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 use alloc::{string::String, vec::Vec};
 
-#[cfg(feature = "pem")]
+// #[cfg(feature = "pem")]
 use {
     crate::PEM_LINE_WIDTH,
     pem::{LineEnding, PemLabel},
@@ -43,7 +43,7 @@ pub trait Encode {
 ///
 /// This is an extension trait which is auto-impl'd for types which impl the
 /// [`Encode`] and [`PemLabel`] traits.
-#[cfg(feature = "pem")]
+// #[cfg(feature = "pem")]
 pub trait EncodePem: Encode + PemLabel {
     /// Encode this type using the [`Encode`] trait, writing the resulting PEM
     /// document into the provided `out` buffer.
@@ -51,11 +51,11 @@ pub trait EncodePem: Encode + PemLabel {
 
     /// Encode this type using the [`Encode`] trait, writing the resulting PEM
     /// document to a returned [`String`].
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     fn encode_pem_string(&self, line_ending: LineEnding) -> Result<String, Error>;
 }
 
-#[cfg(feature = "pem")]
+// #[cfg(feature = "pem")]
 impl<T: Encode + PemLabel> EncodePem for T {
     fn encode_pem<'o>(&self, line_ending: LineEnding, out: &'o mut [u8]) -> Result<&'o str, Error> {
         let mut writer =
@@ -66,8 +66,7 @@ impl<T: Encode + PemLabel> EncodePem for T {
         let encoded_len = writer.finish().map_err(Error::from)?;
         str::from_utf8(&out[..encoded_len]).map_err(Error::from)
     }
-
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     fn encode_pem_string(&self, line_ending: LineEnding) -> Result<String, Error> {
         let encoded_len = pem::encapsulated_len_wrapped(
             Self::PEM_LABEL,
@@ -206,7 +205,7 @@ impl Encode for &str {
     }
 }
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 impl Encode for Vec<u8> {
     fn encoded_len(&self) -> Result<usize, Error> {
         self.as_slice().encoded_len()
@@ -217,7 +216,7 @@ impl Encode for Vec<u8> {
     }
 }
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 impl Encode for String {
     fn encoded_len(&self) -> Result<usize, Error> {
         self.as_str().encoded_len()
@@ -228,7 +227,7 @@ impl Encode for String {
     }
 }
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 impl Encode for Vec<String> {
     fn encoded_len(&self) -> Result<usize, Error> {
         self.iter().try_fold(4usize, |acc, string| {

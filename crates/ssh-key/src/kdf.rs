@@ -5,18 +5,18 @@
 use crate::{Error, KdfAlg, Result};
 use encoding::{CheckedSum, Decode, Encode, Reader, Writer};
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 use alloc::vec::Vec;
 
-#[cfg(feature = "encryption")]
+// #[cfg(feature = "encryption")]
 use {crate::Cipher, bcrypt_pbkdf::bcrypt_pbkdf, rand_core::CryptoRngCore, zeroize::Zeroizing};
 
 /// Default number of rounds to use for bcrypt-pbkdf.
-#[cfg(feature = "encryption")]
+// #[cfg(feature = "encryption")]
 const DEFAULT_BCRYPT_ROUNDS: u32 = 16;
 
 /// Default salt size. Matches OpenSSH.
-#[cfg(feature = "encryption")]
+// #[cfg(feature = "encryption")]
 const DEFAULT_SALT_SIZE: usize = 16;
 
 /// Key Derivation Functions (KDF).
@@ -27,7 +27,7 @@ pub enum Kdf {
     None,
 
     /// bcrypt-pbkdf options.
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     Bcrypt {
         /// Salt
         salt: Vec<u8>,
@@ -42,7 +42,7 @@ pub enum Kdf {
 
 impl Kdf {
     /// Initialize KDF configuration for the given algorithm.
-    #[cfg(feature = "encryption")]
+    // #[cfg(feature = "encryption")]
     pub fn new(algorithm: KdfAlg, rng: &mut impl CryptoRngCore) -> Result<Self> {
         let mut salt = vec![0u8; DEFAULT_SALT_SIZE];
         rng.fill_bytes(&mut salt);
@@ -64,14 +64,14 @@ impl Kdf {
     pub fn algorithm(&self) -> KdfAlg {
         match self {
             Self::None => KdfAlg::None,
-            #[cfg(feature = "alloc")]
+            // #[cfg(feature = "alloc")]
             Self::Bcrypt { .. } => KdfAlg::Bcrypt,
             Self::Argon2 { .. } => KdfAlg::Argon2,
         }
     }
 
     /// Derive an encryption key from the given password.
-    #[cfg(feature = "encryption")]
+    // #[cfg(feature = "encryption")]
     pub fn derive(&self, password: impl AsRef<[u8]>, output: &mut [u8]) -> Result<()> {
         match self {
             Kdf::None => Err(Error::Decrypted),
@@ -95,7 +95,7 @@ impl Kdf {
     /// Derive key and IV for the given [`Cipher`].
     ///
     /// Returns two byte vectors containing the key and IV respectively.
-    #[cfg(feature = "encryption")]
+    // #[cfg(feature = "encryption")]
     pub fn derive_key_and_iv(
         &self,
         cipher: Cipher,
@@ -123,7 +123,7 @@ impl Kdf {
     }
 
     /// Is the KDF configured as `bcrypt` (i.e. bcrypt-pbkdf)?
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     pub fn is_bcrypt(&self) -> bool {
         matches!(self, Self::Bcrypt { .. })
     }
@@ -150,8 +150,7 @@ impl Decode for Kdf {
             KdfAlg::Bcrypt => {
                 #[cfg(not(feature = "alloc"))]
                 return Err(Error::AlgorithmUnknown);
-
-                #[cfg(feature = "alloc")]
+                // #[cfg(feature = "alloc")]
                 reader.read_prefixed(|reader| {
                     Ok(Self::Bcrypt {
                         salt: Vec::decode(reader)?,
@@ -172,7 +171,7 @@ impl Encode for Kdf {
     fn encoded_len(&self) -> encoding::Result<usize> {
         let kdfopts_prefixed_len = match self {
             Self::None => 4,
-            #[cfg(feature = "alloc")]
+            // #[cfg(feature = "alloc")]
             Self::Bcrypt { salt, .. } => [12, salt.len()].checked_sum()?,
             Self::Argon2 { salt } => [12, salt.len()].checked_sum()?,
         };
@@ -185,7 +184,7 @@ impl Encode for Kdf {
 
         match self {
             Self::None => 0usize.encode(writer)?,
-            #[cfg(feature = "alloc")]
+            // #[cfg(feature = "alloc")]
             Self::Bcrypt { salt, rounds } => {
                 [8, salt.len()].checked_sum()?.encode(writer)?;
                 salt.encode(writer)?;

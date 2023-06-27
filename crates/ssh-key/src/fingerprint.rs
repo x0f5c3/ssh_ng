@@ -17,7 +17,7 @@ use sha2::{Digest, Sha256, Sha512};
 /// Fingerprint encoding error message.
 const FINGERPRINT_ERR_MSG: &str = "fingerprint encoding error";
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 use alloc::string::{String, ToString};
 
 #[cfg(all(feature = "alloc", feature = "serde"))]
@@ -152,7 +152,7 @@ impl Fingerprint {
     /// |  .o*            |
     /// +----[SHA256]-----+
     /// ```
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     pub fn to_randomart(self, header: &str) -> String {
         Randomart::new(header, self).to_string()
     }

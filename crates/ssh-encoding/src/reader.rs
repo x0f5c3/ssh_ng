@@ -4,7 +4,7 @@ use crate::{decode::Decode, Error, Result};
 use core::str;
 
 /// Constant-time Base64 reader implementation.
-#[cfg(feature = "base64")]
+// #[cfg(feature = "base64")]
 pub type Base64Reader<'i> = base64::Decoder<'i, base64::Base64>;
 
 /// Reader trait which decodes the binary SSH protocol serialization from
@@ -145,7 +145,7 @@ impl Reader for &[u8] {
     }
 }
 
-#[cfg(feature = "base64")]
+// #[cfg(feature = "base64")]
 impl Reader for Base64Reader<'_> {
     fn read<'o>(&mut self, out: &'o mut [u8]) -> Result<&'o [u8]> {
         Ok(self.decode(out)?)
@@ -156,7 +156,7 @@ impl Reader for Base64Reader<'_> {
     }
 }
 
-#[cfg(feature = "pem")]
+// #[cfg(feature = "pem")]
 impl Reader for pem::Decoder<'_> {
     fn read<'o>(&mut self, out: &'o mut [u8]) -> Result<&'o [u8]> {
         Ok(self.decode(out)?)

@@ -4,10 +4,10 @@ use super::{unix_time::UnixTime, CertType, Certificate, Field, OptionsMap};
 use crate::{public, Result, Signature, SigningKey};
 use alloc::{string::String, vec::Vec};
 
-#[cfg(feature = "rand_core")]
+// #[cfg(feature = "rand_core")]
 use rand_core::CryptoRngCore;
 
-#[cfg(feature = "std")]
+// #[cfg(feature = "std")]
 use std::time::SystemTime;
 
 #[cfg(doc)]
@@ -132,7 +132,7 @@ impl Builder {
 
     /// Create a new certificate builder with the validity window specified
     /// using [`SystemTime`] values.
-    #[cfg(feature = "std")]
+    // #[cfg(feature = "std")]
     pub fn new_with_validity_times(
         nonce: impl Into<Vec<u8>>,
         public_key: impl Into<public::KeyData>,
@@ -150,7 +150,7 @@ impl Builder {
 
     /// Create a new certificate builder, generating a random nonce using the
     /// provided random number generator.
-    #[cfg(feature = "rand_core")]
+    // #[cfg(feature = "rand_core")]
     pub fn new_with_random_nonce(
         rng: &mut impl CryptoRngCore,
         public_key: impl Into<public::KeyData>,

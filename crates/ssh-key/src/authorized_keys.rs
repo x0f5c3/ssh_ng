@@ -3,13 +3,13 @@
 use crate::{Error, PublicKey, Result};
 use core::str;
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 use {
     alloc::string::{String, ToString},
     core::fmt,
 };
 
-#[cfg(feature = "std")]
+// #[cfg(feature = "std")]
 use std::{fs, path::Path, vec::Vec};
 
 /// Character that begins a comment
@@ -49,7 +49,7 @@ impl<'a> AuthorizedKeys<'a> {
 
     /// Read an [`AuthorizedKeys`] file from the filesystem, returning an
     /// [`Entry`] vector on success.
-    #[cfg(feature = "std")]
+    // #[cfg(feature = "std")]
     pub fn read_file(path: impl AsRef<Path>) -> Result<Vec<Entry>> {
         // TODO(tarcieri): permissions checks
         let input = fs::read_to_string(path)?;
@@ -90,7 +90,7 @@ impl Iterator for AuthorizedKeys<'_> {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Entry {
     /// Configuration options field, if present.
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     config_opts: ConfigOpts,
 
     /// Public key
@@ -99,7 +99,7 @@ pub struct Entry {
 
 impl Entry {
     /// Get configuration options for this entry.
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     pub fn config_opts(&self) -> &ConfigOpts {
         &self.config_opts
     }
@@ -110,7 +110,7 @@ impl Entry {
     }
 }
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 impl From<Entry> for ConfigOpts {
     fn from(entry: Entry) -> ConfigOpts {
         entry.config_opts
@@ -126,7 +126,7 @@ impl From<Entry> for PublicKey {
 impl From<PublicKey> for Entry {
     fn from(public_key: PublicKey) -> Entry {
         Entry {
-            #[cfg(feature = "alloc")]
+            // #[cfg(feature = "alloc")]
             config_opts: ConfigOpts::default(),
             public_key,
         }
@@ -140,7 +140,7 @@ impl str::FromStr for Entry {
         // TODO(tarcieri): more liberal whitespace handling?
         match line.matches(' ').count() {
             1..=2 => Ok(Self {
-                #[cfg(feature = "alloc")]
+                // #[cfg(feature = "alloc")]
                 config_opts: Default::default(),
                 public_key: line.parse()?,
             }),
@@ -150,7 +150,7 @@ impl str::FromStr for Entry {
                     ConfigOptsIter(config_opts_str).validate()?;
 
                     Ok(Self {
-                        #[cfg(feature = "alloc")]
+                        // #[cfg(feature = "alloc")]
                         config_opts: ConfigOpts(config_opts_str.to_string()),
                         public_key: public_key_str.parse()?,
                     })
@@ -161,7 +161,7 @@ impl str::FromStr for Entry {
     }
 }
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 impl ToString for Entry {
     fn to_string(&self) -> String {
         let mut s = String::new();
@@ -183,11 +183,11 @@ impl ToString for Entry {
 ///
 /// The [`ConfigOpts::iter`] method can be used to iterate over each
 /// comma-separated value.
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct ConfigOpts(String);
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 impl ConfigOpts {
     /// Parse an options string.
     pub fn new(string: impl Into<String>) -> Result<Self> {
@@ -212,14 +212,14 @@ impl ConfigOpts {
     }
 }
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 impl AsRef<str> for ConfigOpts {
     fn as_ref(&self) -> &str {
         self.as_str()
     }
 }
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 impl str::FromStr for ConfigOpts {
     type Err = Error;
 
@@ -228,7 +228,7 @@ impl str::FromStr for ConfigOpts {
     }
 }
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 impl fmt::Display for ConfigOpts {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.write_str(&self.0)

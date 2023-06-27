@@ -1,7 +1,6 @@
 use crate::algorithm::public_key::PublicKey;
 use crate::model::Data;
 use crate::SshError;
-use ring::signature;
 
 pub(super) struct Ed25519;
 

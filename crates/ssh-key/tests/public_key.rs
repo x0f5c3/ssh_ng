@@ -3,44 +3,44 @@
 use hex_literal::hex;
 use ssh_key::{Algorithm, PublicKey};
 
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 use ssh_key::EcdsaCurve;
 
 /// DSA OpenSSH-formatted public key
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 const OPENSSH_DSA_EXAMPLE: &str = include_str!("examples/id_dsa_1024.pub");
 
 /// ECDSA/NIST P-256 OpenSSH-formatted public key
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 const OPENSSH_ECDSA_P256_EXAMPLE: &str = include_str!("examples/id_ecdsa_p256.pub");
 
 /// ECDSA/NIST P-384 OpenSSH-formatted public key
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 const OPENSSH_ECDSA_P384_EXAMPLE: &str = include_str!("examples/id_ecdsa_p384.pub");
 
 /// ECDSA/NIST P-521 OpenSSH-formatted public key
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 const OPENSSH_ECDSA_P521_EXAMPLE: &str = include_str!("examples/id_ecdsa_p521.pub");
 
 /// Ed25519 OpenSSH-formatted public key
 const OPENSSH_ED25519_EXAMPLE: &str = include_str!("examples/id_ed25519.pub");
 
 /// RSA (3072-bit) OpenSSH-formatted public key
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 const OPENSSH_RSA_3072_EXAMPLE: &str = include_str!("examples/id_rsa_3072.pub");
 
 /// RSA (4096-bit) OpenSSH-formatted public key
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 const OPENSSH_RSA_4096_EXAMPLE: &str = include_str!("examples/id_rsa_4096.pub");
 
 /// Security Key (FIDO/U2F) ECDSA/NIST P-256 OpenSSH-formatted public key
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 const OPENSSH_SK_ECDSA_P256_EXAMPLE: &str = include_str!("examples/id_sk_ecdsa_p256.pub");
 
 /// Security Key (FIDO/U2F) Ed25519 OpenSSH-formatted public key
 const OPENSSH_SK_ED25519_EXAMPLE: &str = include_str!("examples/id_sk_ed25519.pub");
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 #[test]
 fn decode_dsa_openssh() {
     let key = PublicKey::from_openssh(OPENSSH_DSA_EXAMPLE).unwrap();
@@ -83,7 +83,7 @@ fn decode_dsa_openssh() {
     );
 }
 
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 #[test]
 fn decode_ecdsa_p256_openssh() {
     let key = PublicKey::from_openssh(OPENSSH_ECDSA_P256_EXAMPLE).unwrap();
@@ -103,8 +103,7 @@ fn decode_ecdsa_p256_openssh() {
         ),
         ecdsa_key.as_ref(),
     );
-
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     assert_eq!("user@example.com", key.comment());
 
     assert_eq!(
@@ -113,7 +112,7 @@ fn decode_ecdsa_p256_openssh() {
     );
 }
 
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 #[test]
 fn decode_ecdsa_p384_openssh() {
     let key = PublicKey::from_openssh(OPENSSH_ECDSA_P384_EXAMPLE).unwrap();
@@ -134,8 +133,7 @@ fn decode_ecdsa_p384_openssh() {
         ),
         ecdsa_key.as_ref(),
     );
-
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     assert_eq!("user@example.com", key.comment());
 
     assert_eq!(
@@ -144,7 +142,7 @@ fn decode_ecdsa_p384_openssh() {
     );
 }
 
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 #[test]
 fn decode_ecdsa_p521_openssh() {
     let key = PublicKey::from_openssh(OPENSSH_ECDSA_P521_EXAMPLE).unwrap();
@@ -166,8 +164,7 @@ fn decode_ecdsa_p521_openssh() {
         ),
         ecdsa_key.as_ref(),
     );
-
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     assert_eq!("user@example.com", key.comment());
 
     assert_eq!(
@@ -185,8 +182,7 @@ fn decode_ed25519_openssh() {
         &hex!("b33eaef37ea2df7caa010defdea34e241f65f1b529a4f43ed14327f5c54aab62"),
         key.key_data().ed25519().unwrap().as_ref(),
     );
-
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     assert_eq!("user@example.com", key.comment());
 
     assert_eq!(
@@ -195,7 +191,7 @@ fn decode_ed25519_openssh() {
     );
 }
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 #[test]
 fn decode_rsa_3072_openssh() {
     let key = PublicKey::from_openssh(OPENSSH_RSA_3072_EXAMPLE).unwrap();
@@ -224,7 +220,7 @@ fn decode_rsa_3072_openssh() {
     );
 }
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 #[test]
 fn decode_rsa_4096_openssh() {
     let key = PublicKey::from_openssh(OPENSSH_RSA_4096_EXAMPLE).unwrap();
@@ -256,7 +252,7 @@ fn decode_rsa_4096_openssh() {
     );
 }
 
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 #[test]
 fn decode_sk_ecdsa_p256_openssh() {
     let key = PublicKey::from_openssh(OPENSSH_SK_ECDSA_P256_EXAMPLE).unwrap();
@@ -272,8 +268,7 @@ fn decode_sk_ecdsa_p256_openssh() {
     );
 
     assert_eq!("ssh:", ecdsa_key.application());
-
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     assert_eq!("user@example.com", key.comment());
 
     assert_eq!(
@@ -294,8 +289,7 @@ fn decode_sk_ed25519_openssh() {
     );
 
     assert_eq!("ssh:", ed25519_key.application());
-
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     assert_eq!("user@example.com", key.comment());
 
     assert_eq!(
@@ -304,7 +298,7 @@ fn decode_sk_ed25519_openssh() {
     );
 }
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 #[test]
 fn encode_dsa_openssh() {
     let key = PublicKey::from_openssh(OPENSSH_DSA_EXAMPLE).unwrap();
@@ -332,21 +326,21 @@ fn encode_ecdsa_p521_openssh() {
     assert_eq!(OPENSSH_ECDSA_P521_EXAMPLE.trim_end(), &key.to_string());
 }
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 #[test]
 fn encode_ed25519_openssh() {
     let key = PublicKey::from_openssh(OPENSSH_ED25519_EXAMPLE).unwrap();
     assert_eq!(OPENSSH_ED25519_EXAMPLE.trim_end(), &key.to_string());
 }
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 #[test]
 fn encode_rsa_3072_openssh() {
     let key = PublicKey::from_openssh(OPENSSH_RSA_3072_EXAMPLE).unwrap();
     assert_eq!(OPENSSH_RSA_3072_EXAMPLE.trim_end(), &key.to_string());
 }
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 #[test]
 fn encode_rsa_4096_openssh() {
     let key = PublicKey::from_openssh(OPENSSH_RSA_4096_EXAMPLE).unwrap();

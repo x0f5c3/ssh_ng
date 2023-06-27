@@ -6,7 +6,7 @@ use encoding::{CheckedSum, Decode, Encode, Reader, Writer};
 use subtle::{Choice, ConstantTimeEq};
 use zeroize::Zeroize;
 
-#[cfg(feature = "rsa")]
+// #[cfg(feature = "rsa")]
 use {
     rand_core::CryptoRngCore,
     rsa::{
@@ -102,11 +102,11 @@ pub struct RsaKeypair {
 
 impl RsaKeypair {
     /// Minimum allowed RSA key size.
-    #[cfg(feature = "rsa")]
+    // #[cfg(feature = "rsa")]
     pub(crate) const MIN_KEY_SIZE: usize = 2048;
 
     /// Generate a random RSA keypair of the given size.
-    #[cfg(feature = "rsa")]
+    // #[cfg(feature = "rsa")]
     pub fn random(rng: &mut impl CryptoRngCore, bit_size: usize) -> Result<Self> {
         if bit_size >= Self::MIN_KEY_SIZE {
             rsa::RsaPrivateKey::new(rng, bit_size)?.try_into()
@@ -179,7 +179,7 @@ impl fmt::Debug for RsaKeypair {
     }
 }
 
-#[cfg(feature = "rsa")]
+// #[cfg(feature = "rsa")]
 impl TryFrom<RsaKeypair> for rsa::RsaPrivateKey {
     type Error = Error;
 
@@ -188,7 +188,7 @@ impl TryFrom<RsaKeypair> for rsa::RsaPrivateKey {
     }
 }
 
-#[cfg(feature = "rsa")]
+// #[cfg(feature = "rsa")]
 impl TryFrom<&RsaKeypair> for rsa::RsaPrivateKey {
     type Error = Error;
 
@@ -211,7 +211,7 @@ impl TryFrom<&RsaKeypair> for rsa::RsaPrivateKey {
     }
 }
 
-#[cfg(feature = "rsa")]
+// #[cfg(feature = "rsa")]
 impl TryFrom<rsa::RsaPrivateKey> for RsaKeypair {
     type Error = Error;
 
@@ -220,7 +220,7 @@ impl TryFrom<rsa::RsaPrivateKey> for RsaKeypair {
     }
 }
 
-#[cfg(feature = "rsa")]
+// #[cfg(feature = "rsa")]
 impl TryFrom<&rsa::RsaPrivateKey> for RsaKeypair {
     type Error = Error;
 
@@ -247,7 +247,7 @@ impl TryFrom<&rsa::RsaPrivateKey> for RsaKeypair {
     }
 }
 
-#[cfg(feature = "rsa")]
+// #[cfg(feature = "rsa")]
 impl<D> TryFrom<&RsaKeypair> for pkcs1v15::SigningKey<D>
 where
     D: Digest + AssociatedOid,

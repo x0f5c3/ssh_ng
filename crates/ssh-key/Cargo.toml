@@ -18,28 +18,31 @@ rust-version = "1.65"
 
 [dependencies]
 cipher = { package = "ssh-cipher", version = "=0.1.0-pre.0", path = "../ssh-cipher" }
-encoding = { package = "ssh-encoding", version = "=0.2.0-pre.0", features = ["base64", "pem", "sha2"], path = "../ssh-encoding" }
-sha2 = { version = "0.10.7", default-features = false }
-signature = { version = "2", default-features = false }
-subtle = { version = "2", default-features = false }
-zeroize = { version = "1", default-features = false, features = ["derive"] }
-ecdsa = "0.16.7"
+encoding = { package = "ssh-encoding", version = "=0.2.0-pre.0", path = "../ssh-encoding" }
+sha2 = { version = "0.10.7"}
+signature = { version = "2"}
+subtle = { version = "2", features = ["std", "core_hint_black_box", "const-generics"] }
+zeroize = { version = "1", features = ["derive"] }
+ecdsa = { version = "0.16.7", features = ["dev", "signing", "std", "pkcs8", "verifying", "serde", "pem", "der", "spki", "rfc6979"] }
 
 
 
 # optional dependencies
-bcrypt-pbkdf = { version = "0.10", optional = true, default-features = false, features = ["alloc"] }
-bigint = { package = "num-bigint-dig", version = "0.8", optional = true, default-features = false }
-dsa = { version = "0.6", optional = true, default-features = false }
-ed25519-dalek = { version = "=2.0.0-rc.2", optional = true, default-features = false }
-p256 = { version = "0.13", optional = true, default-features = false, features = ["ecdsa"] }
-p384 = { version = "0.13", optional = true, default-features = false, features = ["ecdsa"] }
-p521 = { version = "0.13.0", optional = true, features = ["alloc", "wip-arithmetic-do-not-use"] }
-rand_core = { version = "0.6.4", optional = true, default-features = false }
-rsa = { version = "0.9", optional = true, default-features = false, features = ["sha2"] }
-sec1 = { version = "0.7", optional = true, default-features = false, features = ["point"] }
-serde = { version = "1", optional = true }
-sha1 = { version = "0.10", optional = true, default-features = false }
+bcrypt-pbkdf = { version = "0.10", features = ["alloc", "zeroize"] }
+bigint = { package = "num-bigint-dig", version = "0.8", features = ["prime", "serde"] }
+dsa = { version = "0.6"}
+p256 = { version = "0.13", features = ["ecdsa", "std", "alloc", "pem", "pkcs8", "serde", "digest"] }
+p384 = { version = "0.13", features = ["ecdsa", "pkcs8", "serde"] }
+p521 = { version = "0.13.0", features = ["alloc", "wip-arithmetic-do-not-use"] }
+rand_core = { version = "0.6.4", features = ["std", "getrandom", "serde"] }
+rsa = { version = "0.9", features = ["sha2"] }
+sec1 = { version = "0.7", features = ["point"] }
+serde = { version = "1"}
+sha1 = { version = "0.10" }
+
+[dependencies.ed25519-dalek]
+version = "=2.0.0-rc.2"
+features = ["serde", "std", "alloc", "batch", "zeroize"]
 
 [dependencies.argon2]
 version = "0.5.0"
@@ -53,43 +56,43 @@ features = ["std", "traits-preview", "rayon"]
 hex-literal = "0.4.1"
 rand_chacha = "0.3"
 
-[features]
-default = ["ecdsa", "rand_core", "std"]
-alloc = [
-    "encoding/alloc",
-    "signature/alloc",
-    "zeroize/alloc"
-]
-std = [
-    "alloc",
-    "encoding/std",
-    "p256?/std",
-    "p384?/std",
-    "p521?/std",
-    "rsa?/std",
-    "sec1?/std",
-    "signature/std"
-]
-
-crypto = ["ed25519", "p256", "p384", "rsa"] # NOTE: `dsa` is obsolete/weak
-dsa = ["dep:bigint", "dep:dsa", "dep:sha1", "alloc", "signature/rand_core"]
-ecdsa = ["dep:sec1"]
-ed25519 = ["dep:ed25519-dalek", "rand_core"]
-encryption = [
-    "dep:bcrypt-pbkdf",
-    "alloc",
-    "cipher/aes-cbc",
-    "cipher/aes-ctr",
-    "cipher/aes-gcm",
-    "cipher/chacha20poly1305",
-    "rand_core"
-]
-getrandom = ["rand_core/getrandom"]
-p256 = ["dep:p256", "ecdsa"]
-p384 = ["dep:p384", "ecdsa"]
-p521 = ["dep:p521", "ecdsa"]
-rsa = ["dep:bigint", "dep:rsa", "alloc", "rand_core"]
-tdes = ["cipher/tdes", "encryption"]
+#[features]
+#default = ["ecdsa", "rand_core", "std"]
+#alloc = [
+#    "encoding/alloc",
+#    "signature/alloc",
+#    "zeroize/alloc"
+#]
+#std = [
+#    "alloc",
+#    "encoding/std",
+#    "p256?/std",
+#    "p384?/std",
+#    "p521?/std",
+#    "rsa?/std",
+#    "sec1?/std",
+#    "signature/std"
+#]
+#
+#crypto = ["ed25519", "p256", "p384", "rsa"] # NOTE: `dsa` is obsolete/weak
+#dsa = ["dep:bigint", "dep:dsa", "dep:sha1", "alloc", "signature/rand_core"]
+#ecdsa = ["dep:sec1"]
+#ed25519 = ["dep:ed25519-dalek", "rand_core"]
+#encryption = [
+#    "dep:bcrypt-pbkdf",
+#    "alloc",
+#    "cipher/aes-cbc",
+#    "cipher/aes-ctr",
+#    "cipher/aes-gcm",
+#    "cipher/chacha20poly1305",
+#    "rand_core"
+#]
+#getrandom = ["rand_core/getrandom"]
+#p256 = ["dep:p256", "ecdsa"]
+#p384 = ["dep:p384", "ecdsa"]
+#p521 = ["dep:p521", "ecdsa"]
+#rsa = ["dep:bigint", "dep:rsa", "alloc", "rand_core"]
+#tdes = ["cipher/tdes", "encryption"]
 
 [package.metadata.docs.rs]
 all-features = true

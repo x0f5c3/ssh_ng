@@ -15,18 +15,15 @@ edition = "2021"
 rust-version = "1.60"
 
 [dependencies]
-base64 = { package = "base64ct", version = "1.4", optional = true }
-pem = { package = "pem-rfc7468", version = "0.7", optional = true }
-sha2 = { version = "0.10", optional = true, default-features = false }
+base64 = { package = "base64ct", version = "1.4", features = ["std"] }
+pem = { package = "pem-rfc7468", version = "0.7", features = ["std"] }
+sha2 = { version = "0.10", features = ["oid", "std"] }
+thiserror = "1.0.40"
 
 [dev-dependencies]
 hex-literal = "0.4.1"
 
 [features]
-alloc = ["base64?/alloc", "pem?/alloc"]
-std = ["alloc", "base64?/std", "pem?/std", "sha2?/std"]
-
-pem = ["base64", "dep:pem"]
 
 [package.metadata.docs.rs]
 all-features = true

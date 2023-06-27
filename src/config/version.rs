@@ -1,6 +1,7 @@
 use std::io::{Read, Write};
 use std::time::Duration;
 
+use crate::error::CrateError;
 use crate::{
     constant::{self, CLIENT_VERSION},
     error::{SshError, SshResult},
@@ -88,7 +89,7 @@ impl SshVersion {
         } else {
             let err_msg = "error in version negotiation, version mismatch.";
             tracing::error!("{}", err_msg);
-            Err(SshError::from(err_msg))
+            Err(CrateError::from(err_msg))
         }
     }
 }

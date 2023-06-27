@@ -1,5 +1,6 @@
 use crate::config::algorithm::AlgList;
 use crate::{algorithm::encryption::Encryption, config::Config};
+use ssh_cipher::Cipher;
 use crate::{algorithm::encryption::EncryptionNone, model::Sequence};
 use std::time::Duration;
 
@@ -8,7 +9,7 @@ pub(crate) struct Client {
     pub(super) sequence: Sequence,
     pub(super) config: Config,
     pub(super) negotiated: AlgList,
-    pub(super) encryptor: Box<dyn Encryption>,
+    pub(super) encryptor: Cipher,
     pub(super) session_id: Vec<u8>,
 }
 

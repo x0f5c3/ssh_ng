@@ -46,7 +46,7 @@ fn decode_byte_slice() {
     assert_eq!(&ret, b"example");
 }
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 #[test]
 fn decode_byte_vec() {
     let mut bytes = hex!("000000076578616d706c65").as_slice();
@@ -54,7 +54,7 @@ fn decode_byte_vec() {
     assert_eq!(&ret, b"example");
 }
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 #[test]
 fn decode_string() {
     let mut bytes = hex!("000000076578616d706c65").as_slice();
@@ -62,7 +62,7 @@ fn decode_string() {
     assert_eq!(&ret, "example");
 }
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 #[test]
 fn decode_string_vec() {
     let mut bytes = hex!("0000001500000003666f6f000000036261720000000362617a").as_slice();

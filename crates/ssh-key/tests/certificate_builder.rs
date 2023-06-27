@@ -10,7 +10,7 @@ use hex_literal::hex;
 use rand_chacha::{rand_core::SeedableRng, ChaCha8Rng};
 use ssh_key::{certificate, Algorithm, PrivateKey};
 
-#[cfg(feature = "p256")]
+// #[cfg(feature = "p256")]
 use ssh_key::EcdsaCurve;
 
 #[cfg(all(feature = "ed25519", feature = "rsa"))]
@@ -28,7 +28,7 @@ const EXPIRES_AT: u64 = 1700000000;
 /// Seed to use for PRNG.
 const PRNG_SEED: [u8; 32] = [42; 32];
 
-#[cfg(feature = "ed25519")]
+// #[cfg(feature = "ed25519")]
 #[test]
 fn ed25519_sign_and_verify() {
     const SERIAL: u64 = 42;
@@ -97,7 +97,7 @@ fn ed25519_sign_and_verify() {
     assert!(cert.validate_at(VALID_AT, &[ca_fingerprint]).is_ok());
 }
 
-#[cfg(feature = "p256")]
+// #[cfg(feature = "p256")]
 #[test]
 fn ecdsa_nistp256_sign_and_verify() {
     let mut rng = ChaCha8Rng::from_seed(PRNG_SEED);

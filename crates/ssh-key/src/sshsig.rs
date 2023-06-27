@@ -102,8 +102,7 @@ impl SshSig {
         if signing_key.public_key().is_sk_ed25519() {
             return Err(Algorithm::SkEd25519.unsupported_error());
         }
-
-        #[cfg(feature = "ecdsa")]
+        // #[cfg(feature = "ecdsa")]
         if signing_key.public_key().is_sk_ecdsa_p256() {
             return Err(Algorithm::SkEcdsaSha2NistP256.unsupported_error());
         }

@@ -3,7 +3,7 @@
 use crate::Algorithm;
 use core::fmt;
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 use crate::certificate;
 
 /// Result type with `ssh-key`'s [`Error`] as the error type.
@@ -31,7 +31,7 @@ pub enum Error {
     },
 
     /// Certificate field is invalid or already set.
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     CertificateFieldInvalid(certificate::Field),
 
     /// Certificate validation failed.
@@ -44,7 +44,7 @@ pub enum Error {
     Decrypted,
 
     /// ECDSA key encoding errors.
-    #[cfg(feature = "ecdsa")]
+    // #[cfg(feature = "ecdsa")]
     Ecdsa(sec1::Error),
 
     /// Encoding errors.
@@ -57,7 +57,7 @@ pub enum Error {
     FormatEncoding,
 
     /// Input/output errors.
-    #[cfg(feature = "std")]
+    // #[cfg(feature = "std")]
     Io(std::io::ErrorKind),
 
     /// Namespace invalid.
@@ -89,19 +89,19 @@ impl fmt::Display for Error {
             Error::AlgorithmUnsupported { algorithm } => {
                 write!(f, "unsupported algorithm: {algorithm}")
             }
-            #[cfg(feature = "alloc")]
+            // #[cfg(feature = "alloc")]
             Error::CertificateFieldInvalid(field) => {
                 write!(f, "certificate field invalid: {field}")
             }
             Error::CertificateValidation => write!(f, "certificate validation failed"),
             Error::Crypto => write!(f, "cryptographic error"),
             Error::Decrypted => write!(f, "private key is already decrypted"),
-            #[cfg(feature = "ecdsa")]
+            // #[cfg(feature = "ecdsa")]
             Error::Ecdsa(err) => write!(f, "ECDSA encoding error: {err}"),
             Error::Encoding(err) => write!(f, "{err}"),
             Error::Encrypted => write!(f, "private key is encrypted"),
             Error::FormatEncoding => write!(f, "format encoding error"),
-            #[cfg(feature = "std")]
+            // #[cfg(feature = "std")]
             Error::Io(err) => write!(f, "I/O error: {}", std::io::Error::from(*err)),
             Error::Namespace => write!(f, "namespace invalid"),
             Error::PublicKey => write!(f, "public key is incorrect"),
@@ -164,7 +164,7 @@ impl From<signature::Error> for Error {
     }
 }
 
-#[cfg(feature = "std")]
+// #[cfg(feature = "std")]
 impl From<signature::Error> for Error {
     fn from(err: signature::Error) -> Error {
         use std::error::Error as _;
@@ -182,53 +182,53 @@ impl From<Error> for signature::Error {
     }
 }
 
-#[cfg(feature = "std")]
+// #[cfg(feature = "std")]
 impl From<Error> for signature::Error {
     fn from(err: Error) -> signature::Error {
         signature::Error::from_source(err)
     }
 }
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 impl From<alloc::string::FromUtf8Error> for Error {
     fn from(err: alloc::string::FromUtf8Error) -> Error {
         Error::Encoding(err.into())
     }
 }
 
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 impl From<sec1::Error> for Error {
     fn from(err: sec1::Error) -> Error {
         Error::Ecdsa(err)
     }
 }
 
-#[cfg(feature = "rsa")]
+// #[cfg(feature = "rsa")]
 impl From<rsa::errors::Error> for Error {
     fn from(_: rsa::errors::Error) -> Error {
         Error::Crypto
     }
 }
 
-#[cfg(feature = "std")]
+// #[cfg(feature = "std")]
 impl From<std::io::Error> for Error {
     fn from(err: std::io::Error) -> Error {
         Error::Io(err.kind())
     }
 }
 
-#[cfg(feature = "std")]
+// #[cfg(feature = "std")]
 impl From<std::time::SystemTimeError> for Error {
     fn from(_: std::time::SystemTimeError) -> Error {
         Error::Time
     }
 }
 
-#[cfg(feature = "std")]
+// #[cfg(feature = "std")]
 impl std::error::Error for Error {
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
         match self {
-            #[cfg(feature = "ecdsa")]
+            // #[cfg(feature = "ecdsa")]
             Self::Ecdsa(err) => Some(err),
             Self::Encoding(err) => Some(err),
             _ => None,

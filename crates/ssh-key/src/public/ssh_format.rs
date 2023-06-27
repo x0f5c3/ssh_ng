@@ -16,7 +16,7 @@ use crate::Result;
 use core::str;
 use encoding::{Base64Writer, Encode};
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 use {alloc::string::String, encoding::CheckedSum};
 
 /// OpenSSH public key (a.k.a. `SSH-format`) decoder/encoder.
@@ -83,7 +83,7 @@ impl<'a> SshFormat<'a> {
     }
 
     /// Encode string with OpenSSH public key encapsulation.
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     pub(crate) fn encode_string<K>(algorithm_id: &str, key: &K, comment: &str) -> Result<String>
     where
         K: Encode,
@@ -109,7 +109,7 @@ impl<'a> SshFormat<'a> {
 /// and can be used to estimate the capacity of an output buffer. However, the
 /// final result may need to be sliced and should use the actual encoded length
 /// rather than this estimate.
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 fn base64_len_approx(input_len: usize) -> usize {
     // TODO(tarcieri): checked arithmetic
     #[allow(clippy::integer_arithmetic)]

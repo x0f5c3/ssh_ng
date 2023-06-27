@@ -1,5 +1,4 @@
 use crate::error::{CrateError, SshError, SshResult};
-use crate::stracing::log;
 use rand::rngs::OsRng;
 use rand::Rng;
 use std::{

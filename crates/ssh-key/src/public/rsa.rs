@@ -3,7 +3,7 @@
 use crate::{Error, Mpint, Result};
 use encoding::{CheckedSum, Decode, Encode, Reader, Writer};
 
-#[cfg(feature = "rsa")]
+// #[cfg(feature = "rsa")]
 use {
     crate::private::RsaKeypair,
     rsa::{pkcs1v15, traits::PublicKeyParts},
@@ -24,7 +24,7 @@ pub struct RsaPublicKey {
 
 impl RsaPublicKey {
     /// Minimum allowed RSA key size.
-    #[cfg(feature = "rsa")]
+    // #[cfg(feature = "rsa")]
     pub(crate) const MIN_KEY_SIZE: usize = RsaKeypair::MIN_KEY_SIZE;
 }
 
@@ -49,7 +49,7 @@ impl Encode for RsaPublicKey {
     }
 }
 
-#[cfg(feature = "rsa")]
+// #[cfg(feature = "rsa")]
 impl TryFrom<RsaPublicKey> for rsa::RsaPublicKey {
     type Error = Error;
 
@@ -58,7 +58,7 @@ impl TryFrom<RsaPublicKey> for rsa::RsaPublicKey {
     }
 }
 
-#[cfg(feature = "rsa")]
+// #[cfg(feature = "rsa")]
 impl TryFrom<&RsaPublicKey> for rsa::RsaPublicKey {
     type Error = Error;
 
@@ -77,7 +77,7 @@ impl TryFrom<&RsaPublicKey> for rsa::RsaPublicKey {
     }
 }
 
-#[cfg(feature = "rsa")]
+// #[cfg(feature = "rsa")]
 impl TryFrom<rsa::RsaPublicKey> for RsaPublicKey {
     type Error = Error;
 
@@ -86,7 +86,7 @@ impl TryFrom<rsa::RsaPublicKey> for RsaPublicKey {
     }
 }
 
-#[cfg(feature = "rsa")]
+// #[cfg(feature = "rsa")]
 impl TryFrom<&rsa::RsaPublicKey> for RsaPublicKey {
     type Error = Error;
 
@@ -98,7 +98,7 @@ impl TryFrom<&rsa::RsaPublicKey> for RsaPublicKey {
     }
 }
 
-#[cfg(feature = "rsa")]
+// #[cfg(feature = "rsa")]
 impl<D> TryFrom<&RsaPublicKey> for pkcs1v15::VerifyingKey<D>
 where
     D: Digest + AssociatedOid,

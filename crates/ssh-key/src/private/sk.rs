@@ -24,7 +24,7 @@ pub struct SkEcdsaSha2NistP256 {
     reserved: Vec<u8>,
 }
 
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 impl SkEcdsaSha2NistP256 {
     /// Get the ECDSA/NIST P-256 public key.
     pub fn public(&self) -> &public::SkEcdsaSha2NistP256 {
@@ -42,7 +42,7 @@ impl SkEcdsaSha2NistP256 {
     }
 }
 
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 impl Decode for SkEcdsaSha2NistP256 {
     type Error = Error;
 
@@ -56,7 +56,7 @@ impl Decode for SkEcdsaSha2NistP256 {
     }
 }
 
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 impl Encode for SkEcdsaSha2NistP256 {
     fn encoded_len(&self) -> encoding::Result<usize> {
         [
@@ -79,7 +79,7 @@ impl Encode for SkEcdsaSha2NistP256 {
 
 /// Security Key (FIDO/U2F) Ed25519 private key as specified in
 /// [PROTOCOL.u2f](https://cvsweb.openbsd.org/src/usr.bin/ssh/PROTOCOL.u2f?annotate=HEAD).
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 #[derive(Clone, Debug, Eq, PartialEq, PartialOrd, Ord)]
 pub struct SkEd25519 {
     /// Public key.

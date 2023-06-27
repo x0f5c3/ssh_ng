@@ -6,10 +6,10 @@ use core::fmt;
 use encoding::{CheckedSum, Decode, Encode, Reader, Writer};
 use signature::{SignatureEncoding, Signer, Verifier};
 
-#[cfg(feature = "ed25519")]
+// #[cfg(feature = "ed25519")]
 use crate::{private::Ed25519Keypair, public::Ed25519PublicKey};
 
-#[cfg(feature = "dsa")]
+// #[cfg(feature = "dsa")]
 use {
     crate::{private::DsaKeypair, public::DsaPublicKey},
     bigint::BigUint,
@@ -24,7 +24,7 @@ use crate::{
     EcdsaCurve,
 };
 
-#[cfg(feature = "rsa")]
+// #[cfg(feature = "rsa")]
 use {
     crate::{private::RsaKeypair, public::RsaPublicKey, HashAlg},
     sha2::Sha512,
@@ -273,13 +273,13 @@ impl Signer<Signature> for private::KeypairData {
     #[allow(unused_variables)]
     fn try_sign(&self, message: &[u8]) -> signature::Result<Signature> {
         match self {
-            #[cfg(feature = "dsa")]
+            // #[cfg(feature = "dsa")]
             Self::Dsa(keypair) => keypair.try_sign(message),
             #[cfg(any(feature = "p256", feature = "p384"))]
             Self::Ecdsa(keypair) => keypair.try_sign(message),
-            #[cfg(feature = "ed25519")]
+            // #[cfg(feature = "ed25519")]
             Self::Ed25519(keypair) => keypair.try_sign(message),
-            #[cfg(feature = "rsa")]
+            // #[cfg(feature = "rsa")]
             Self::Rsa(keypair) => keypair.try_sign(message),
             _ => Err(self.algorithm()?.unsupported_error().into()),
         }
@@ -296,15 +296,15 @@ impl Verifier<Signature> for public::KeyData {
     #[allow(unused_variables)]
     fn verify(&self, message: &[u8], signature: &Signature) -> signature::Result<()> {
         match self {
-            #[cfg(feature = "dsa")]
+            // #[cfg(feature = "dsa")]
             Self::Dsa(pk) => pk.verify(message, signature),
             #[cfg(any(feature = "p256", feature = "p384"))]
             Self::Ecdsa(pk) => pk.verify(message, signature),
-            #[cfg(feature = "ed25519")]
+            // #[cfg(feature = "ed25519")]
             Self::Ed25519(pk) => pk.verify(message, signature),
-            #[cfg(feature = "ed25519")]
+            // #[cfg(feature = "ed25519")]
             Self::SkEd25519(pk) => pk.verify(message, signature),
-            #[cfg(feature = "rsa")]
+            // #[cfg(feature = "rsa")]
             Self::Rsa(pk) => pk.verify(message, signature),
             #[allow(unreachable_patterns)]
             _ => Err(self.algorithm().unsupported_error().into()),
@@ -312,7 +312,7 @@ impl Verifier<Signature> for public::KeyData {
     }
 }
 
-#[cfg(feature = "dsa")]
+// #[cfg(feature = "dsa")]
 impl Signer<Signature> for DsaKeypair {
     fn try_sign(&self, message: &[u8]) -> signature::Result<Signature> {
         let signature = dsa::SigningKey::try_from(self)?
@@ -337,7 +337,7 @@ impl Signer<Signature> for DsaKeypair {
     }
 }
 
-#[cfg(feature = "dsa")]
+// #[cfg(feature = "dsa")]
 impl Verifier<Signature> for DsaPublicKey {
     fn verify(&self, message: &[u8], signature: &Signature) -> signature::Result<()> {
         match signature.algorithm {
@@ -360,7 +360,7 @@ impl Verifier<Signature> for DsaPublicKey {
     }
 }
 
-#[cfg(feature = "ed25519")]
+// #[cfg(feature = "ed25519")]
 impl TryFrom<Signature> for ed25519_dalek::Signature {
     type Error = Error;
 
@@ -369,7 +369,7 @@ impl TryFrom<Signature> for ed25519_dalek::Signature {
     }
 }
 
-#[cfg(feature = "ed25519")]
+// #[cfg(feature = "ed25519")]
 impl TryFrom<&Signature> for ed25519_dalek::Signature {
     type Error = Error;
 
@@ -383,7 +383,7 @@ impl TryFrom<&Signature> for ed25519_dalek::Signature {
     }
 }
 
-#[cfg(feature = "ed25519")]
+// #[cfg(feature = "ed25519")]
 impl Signer<Signature> for Ed25519Keypair {
     fn try_sign(&self, message: &[u8]) -> signature::Result<Signature> {
         let signature = ed25519_dalek::SigningKey::try_from(self)?.sign(message);
@@ -395,7 +395,7 @@ impl Signer<Signature> for Ed25519Keypair {
     }
 }
 
-#[cfg(feature = "ed25519")]
+// #[cfg(feature = "ed25519")]
 impl Verifier<Signature> for Ed25519PublicKey {
     fn verify(&self, message: &[u8], signature: &Signature) -> signature::Result<()> {
         let signature = ed25519_dalek::Signature::try_from(signature)?;
@@ -403,7 +403,7 @@ impl Verifier<Signature> for Ed25519PublicKey {
     }
 }
 
-#[cfg(feature = "ed25519")]
+// #[cfg(feature = "ed25519")]
 impl Verifier<Signature> for public::SkEd25519 {
     fn verify(&self, message: &[u8], signature: &Signature) -> signature::Result<()> {
         let signature_len = signature
@@ -426,7 +426,7 @@ impl Verifier<Signature> for public::SkEd25519 {
     }
 }
 
-#[cfg(feature = "p256")]
+// #[cfg(feature = "p256")]
 impl TryFrom<p256::ecdsa::Signature> for Signature {
     type Error = Error;
 
@@ -435,7 +435,7 @@ impl TryFrom<p256::ecdsa::Signature> for Signature {
     }
 }
 
-#[cfg(feature = "p384")]
+// #[cfg(feature = "p384")]
 impl TryFrom<p384::ecdsa::Signature> for Signature {
     type Error = Error;
 
@@ -444,7 +444,7 @@ impl TryFrom<p384::ecdsa::Signature> for Signature {
     }
 }
 
-#[cfg(feature = "p256")]
+// #[cfg(feature = "p256")]
 impl TryFrom<&p256::ecdsa::Signature> for Signature {
     type Error = Error;
 
@@ -466,7 +466,7 @@ impl TryFrom<&p256::ecdsa::Signature> for Signature {
     }
 }
 
-#[cfg(feature = "p384")]
+// #[cfg(feature = "p384")]
 impl TryFrom<&p384::ecdsa::Signature> for Signature {
     type Error = Error;
 
@@ -488,7 +488,7 @@ impl TryFrom<&p384::ecdsa::Signature> for Signature {
     }
 }
 
-#[cfg(feature = "p256")]
+// #[cfg(feature = "p256")]
 impl TryFrom<Signature> for p256::ecdsa::Signature {
     type Error = Error;
 
@@ -497,7 +497,7 @@ impl TryFrom<Signature> for p256::ecdsa::Signature {
     }
 }
 
-#[cfg(feature = "p384")]
+// #[cfg(feature = "p384")]
 impl TryFrom<Signature> for p384::ecdsa::Signature {
     type Error = Error;
 
@@ -506,7 +506,7 @@ impl TryFrom<Signature> for p384::ecdsa::Signature {
     }
 }
 
-#[cfg(feature = "p256")]
+// #[cfg(feature = "p256")]
 impl TryFrom<&Signature> for p256::ecdsa::Signature {
     type Error = Error;
 
@@ -536,7 +536,7 @@ impl TryFrom<&Signature> for p256::ecdsa::Signature {
     }
 }
 
-#[cfg(feature = "p384")]
+// #[cfg(feature = "p384")]
 impl TryFrom<&Signature> for p384::ecdsa::Signature {
     type Error = Error;
 
@@ -570,16 +570,16 @@ impl TryFrom<&Signature> for p384::ecdsa::Signature {
 impl Signer<Signature> for EcdsaKeypair {
     fn try_sign(&self, message: &[u8]) -> signature::Result<Signature> {
         match self {
-            #[cfg(feature = "p256")]
+            // #[cfg(feature = "p256")]
             Self::NistP256 { private, .. } => private.try_sign(message),
-            #[cfg(feature = "p384")]
+            // #[cfg(feature = "p384")]
             Self::NistP384 { private, .. } => private.try_sign(message),
             _ => Err(self.algorithm().unsupported_error().into()),
         }
     }
 }
 
-#[cfg(feature = "p256")]
+// #[cfg(feature = "p256")]
 impl Signer<Signature> for EcdsaPrivateKey<32> {
     fn try_sign(&self, message: &[u8]) -> signature::Result<Signature> {
         let signing_key = p256::ecdsa::SigningKey::from_slice(self.as_ref())?;
@@ -588,7 +588,7 @@ impl Signer<Signature> for EcdsaPrivateKey<32> {
     }
 }
 
-#[cfg(feature = "p384")]
+// #[cfg(feature = "p384")]
 impl Signer<Signature> for EcdsaPrivateKey<48> {
     fn try_sign(&self, message: &[u8]) -> signature::Result<Signature> {
         let signing_key = p384::ecdsa::SigningKey::from_slice(self.as_ref())?;
@@ -602,14 +602,13 @@ impl Verifier<Signature> for EcdsaPublicKey {
     fn verify(&self, message: &[u8], signature: &Signature) -> signature::Result<()> {
         match signature.algorithm {
             Algorithm::Ecdsa { curve } => match curve {
-                #[cfg(feature = "p256")]
+                // #[cfg(feature = "p256")]
                 EcdsaCurve::NistP256 => {
                     let verifying_key = p256::ecdsa::VerifyingKey::try_from(self)?;
                     let signature = p256::ecdsa::Signature::try_from(signature)?;
                     verifying_key.verify(message, &signature)
                 }
-
-                #[cfg(feature = "p384")]
+                // #[cfg(feature = "p384")]
                 EcdsaCurve::NistP384 => {
                     let verifying_key = p384::ecdsa::VerifyingKey::try_from(self)?;
                     let signature = p384::ecdsa::Signature::try_from(signature)?;
@@ -623,7 +622,7 @@ impl Verifier<Signature> for EcdsaPublicKey {
     }
 }
 
-#[cfg(feature = "rsa")]
+// #[cfg(feature = "rsa")]
 impl Signer<Signature> for RsaKeypair {
     fn try_sign(&self, message: &[u8]) -> signature::Result<Signature> {
         let data = rsa::pkcs1v15::SigningKey::<Sha512>::try_from(self)?
@@ -639,7 +638,7 @@ impl Signer<Signature> for RsaKeypair {
     }
 }
 
-#[cfg(feature = "rsa")]
+// #[cfg(feature = "rsa")]
 impl Verifier<Signature> for RsaPublicKey {
     fn verify(&self, message: &[u8], signature: &Signature) -> signature::Result<()> {
         match signature.algorithm {
@@ -667,8 +666,7 @@ mod tests {
     use alloc::vec::Vec;
     use encoding::Encode;
     use hex_literal::hex;
-
-    #[cfg(feature = "ed25519")]
+    // #[cfg(feature = "ed25519")]
     use {
         super::Ed25519Keypair,
         signature::{Signer, Verifier},
@@ -681,7 +679,7 @@ mod tests {
     const RSA_SHA512_SIGNATURE: &[u8] = &hex!("0000000c7273612d736861322d3531320000018085a4ad1a91a62c00c85de7bb511f38088ff2bce763d76f4786febbe55d47624f9e2cffce58a680183b9ad162c7f0191ea26cab001ac5f5055743eced58e9981789305c208fc98d2657954e38eb28c7e7f3fbe92393a14324ed77aebb772a41aa7a107b38cb9bd1d9ad79b275135d1d7e019bb1d56d74f2450be6db0771f48f6707d3fcf9789592ca2e55595acc16b6e8d0139b56c5d1360b3a1e060f4151a3d7841df2c2a8c94d6f8a1bf633165ee0bcadac5642763df0dd79d3235ae5506595145f199d8abe8f9980411bf70a16e30f273736324d047043317044c36374d6a5ed34cac251e01c6795e4578393f9090bf4ae3e74a0009275a197315fc9c62f1c9aec1ba3b2d37c3b207e5500df19e090e7097ebc038fb9c9e35aea9161479ba6b5190f48e89e1abe51e8ec0e120ef89776e129687ca52d1892c8e88e6ef062a7d96b8a87682ca6a42ff1df0cdf5815c3645aeed7267ca7093043db0565e0f109b796bf117b9d2bb6d6debc0c67a4c9fb3aae3e29b00c7bd70f6c11cf53c295ff");
 
     /// Example test vector for signing.
-    #[cfg(feature = "ed25519")]
+    // #[cfg(feature = "ed25519")]
     const EXAMPLE_MSG: &[u8] = b"Hello, world!";
 
     #[test]
@@ -759,8 +757,7 @@ mod tests {
         signature.encode(&mut result).unwrap();
         assert_eq!(SK_ED25519_SIGNATURE, &result);
     }
-
-    #[cfg(feature = "ed25519")]
+    // #[cfg(feature = "ed25519")]
     #[test]
     fn sign_and_verify_ed25519() {
         let keypair = Ed25519Keypair::from_seed(&[42; 32]);

@@ -17,12 +17,12 @@
     unused_qualifications
 )]
 
-#[cfg(feature = "std")]
+// #[cfg(feature = "std")]
 extern crate std;
 
 mod error;
 
-#[cfg(feature = "chacha20poly1305")]
+// #[cfg(feature = "chacha20poly1305")]
 mod chacha20poly1305;
 
 pub use crate::error::{Error, Result};
@@ -30,13 +30,13 @@ pub use crate::error::{Error, Result};
 use core::{fmt, str};
 use encoding::{Label, LabelError};
 
-#[cfg(feature = "aes-ctr")]
+// #[cfg(feature = "aes-ctr")]
 use cipher::StreamCipherCore;
 
-#[cfg(feature = "aes-gcm")]
+// #[cfg(feature = "aes-gcm")]
 use aes_gcm::{aead::AeadInPlace, Aes128Gcm, Aes256Gcm};
 
-#[cfg(feature = "chacha20poly1305")]
+// #[cfg(feature = "chacha20poly1305")]
 use crate::chacha20poly1305::ChaCha20Poly1305;
 
 #[cfg(any(feature = "aes-cbc", feature = "aes-ctr"))]
@@ -54,7 +54,7 @@ use cipher::KeyInit;
 #[cfg(any(feature = "aes-cbc", feature = "aes-ctr", feature = "tdes"))]
 use cipher::KeyIvInit;
 
-#[cfg(feature = "tdes")]
+// #[cfg(feature = "tdes")]
 use des::TdesEde3;
 
 /// AES-128 in block chaining (CBC) mode
@@ -100,7 +100,7 @@ pub type Nonce = [u8; 12];
 pub type Tag = [u8; 16];
 
 /// Counter mode with a 32-bit big endian counter.
-#[cfg(feature = "aes-ctr")]
+// #[cfg(feature = "aes-ctr")]
 type Ctr128BE<Cipher> = ctr::CtrCore<Cipher, ctr::flavors::Ctr128BE>;
 
 /// Cipher algorithms.
@@ -230,28 +230,28 @@ impl Cipher {
     /// Decrypt the ciphertext in the `buffer` in-place using this cipher.
     pub fn decrypt(self, key: &[u8], iv: &[u8], buffer: &mut [u8], tag: Option<Tag>) -> Result<()> {
         match self {
-            #[cfg(feature = "aes-cbc")]
+            // #[cfg(feature = "aes-cbc")]
             Self::Aes128Cbc => {
                 if tag.is_some() {
                     return Err(Error::TagSize);
                 }
                 cbc_decrypt::<Aes128>(key, iv, buffer)
             }
-            #[cfg(feature = "aes-cbc")]
+            // #[cfg(feature = "aes-cbc")]
             Self::Aes192Cbc => {
                 if tag.is_some() {
                     return Err(Error::TagSize);
                 }
                 cbc_decrypt::<Aes192>(key, iv, buffer)
             }
-            #[cfg(feature = "aes-cbc")]
+            // #[cfg(feature = "aes-cbc")]
             Self::Aes256Cbc => {
                 if tag.is_some() {
                     return Err(Error::TagSize);
                 }
                 cbc_decrypt::<Aes256>(key, iv, buffer)
             }
-            #[cfg(feature = "aes-ctr")]
+            // #[cfg(feature = "aes-ctr")]
             Self::Aes128Ctr | Self::Aes192Ctr | Self::Aes256Ctr => {
                 if tag.is_some() {
                     return Err(Error::TagSize);
@@ -261,7 +261,7 @@ impl Cipher {
                 self.encrypt(key, iv, buffer)?;
                 Ok(())
             }
-            #[cfg(feature = "aes-gcm")]
+            // #[cfg(feature = "aes-gcm")]
             Self::Aes128Gcm => {
                 let cipher = Aes128Gcm::new_from_slice(key).map_err(|_| Error::KeySize)?;
                 let nonce = Nonce::try_from(iv).map_err(|_| Error::IvSize)?;
@@ -272,7 +272,7 @@ impl Cipher {
 
                 Ok(())
             }
-            #[cfg(feature = "aes-gcm")]
+            // #[cfg(feature = "aes-gcm")]
             Self::Aes256Gcm => {
                 let cipher = Aes256Gcm::new_from_slice(key).map_err(|_| Error::KeySize)?;
                 let nonce = Nonce::try_from(iv).map_err(|_| Error::IvSize)?;
@@ -283,12 +283,12 @@ impl Cipher {
 
                 Ok(())
             }
-            #[cfg(feature = "chacha20poly1305")]
+            // #[cfg(feature = "chacha20poly1305")]
             Self::ChaCha20Poly1305 => {
                 let tag = tag.ok_or(Error::TagSize)?;
                 ChaCha20Poly1305::new(key, iv)?.decrypt(buffer, tag)
             }
-            #[cfg(feature = "tdes")]
+            // #[cfg(feature = "tdes")]
             Self::TDesCbc => {
                 if tag.is_some() {
                     return Err(Error::TagSize);
@@ -306,37 +306,37 @@ impl Cipher {
     /// Encrypt the ciphertext in the `buffer` in-place using this cipher.
     pub fn encrypt(self, key: &[u8], iv: &[u8], buffer: &mut [u8]) -> Result<Option<Tag>> {
         match self {
-            #[cfg(feature = "aes-cbc")]
+            // #[cfg(feature = "aes-cbc")]
             Self::Aes128Cbc => {
                 cbc_encrypt::<Aes128>(key, iv, buffer)?;
                 Ok(None)
             }
-            #[cfg(feature = "aes-cbc")]
+            // #[cfg(feature = "aes-cbc")]
             Self::Aes192Cbc => {
                 cbc_encrypt::<Aes192>(key, iv, buffer)?;
                 Ok(None)
             }
-            #[cfg(feature = "aes-cbc")]
+            // #[cfg(feature = "aes-cbc")]
             Self::Aes256Cbc => {
                 cbc_encrypt::<Aes256>(key, iv, buffer)?;
                 Ok(None)
             }
-            #[cfg(feature = "aes-ctr")]
+            // #[cfg(feature = "aes-ctr")]
             Self::Aes128Ctr => {
                 ctr_encrypt::<Ctr128BE<Aes128>>(key, iv, buffer)?;
                 Ok(None)
             }
-            #[cfg(feature = "aes-ctr")]
+            // #[cfg(feature = "aes-ctr")]
             Self::Aes192Ctr => {
                 ctr_encrypt::<Ctr128BE<Aes192>>(key, iv, buffer)?;
                 Ok(None)
             }
-            #[cfg(feature = "aes-ctr")]
+            // #[cfg(feature = "aes-ctr")]
             Self::Aes256Ctr => {
                 ctr_encrypt::<Ctr128BE<Aes256>>(key, iv, buffer)?;
                 Ok(None)
             }
-            #[cfg(feature = "aes-gcm")]
+            // #[cfg(feature = "aes-gcm")]
             Self::Aes128Gcm => {
                 let cipher = Aes128Gcm::new_from_slice(key).map_err(|_| Error::KeySize)?;
                 let nonce = Nonce::try_from(iv).map_err(|_| Error::IvSize)?;
@@ -346,7 +346,7 @@ impl Cipher {
 
                 Ok(Some(tag.into()))
             }
-            #[cfg(feature = "aes-gcm")]
+            // #[cfg(feature = "aes-gcm")]
             Self::Aes256Gcm => {
                 let cipher = Aes256Gcm::new_from_slice(key).map_err(|_| Error::KeySize)?;
                 let nonce = Nonce::try_from(iv).map_err(|_| Error::IvSize)?;
@@ -356,12 +356,12 @@ impl Cipher {
 
                 Ok(Some(tag.into()))
             }
-            #[cfg(feature = "chacha20poly1305")]
+            // #[cfg(feature = "chacha20poly1305")]
             Self::ChaCha20Poly1305 => {
                 let tag = ChaCha20Poly1305::new(key, iv)?.encrypt(buffer);
                 Ok(Some(tag))
             }
-            #[cfg(feature = "tdes")]
+            // #[cfg(feature = "tdes")]
             Self::TDesCbc => {
                 cbc_encrypt::<TdesEde3>(key, iv, buffer)?;
                 Ok(None)
@@ -415,7 +415,6 @@ impl str::FromStr for Cipher {
     }
 }
 
-#[cfg(any(feature = "aes-cbc", feature = "tdes"))]
 fn cbc_encrypt<C>(key: &[u8], iv: &[u8], buffer: &mut [u8]) -> Result<()>
 where
     C: BlockEncryptMut + BlockCipher + KeyInit,
@@ -430,7 +429,6 @@ where
     Ok(())
 }
 
-#[cfg(any(feature = "aes-cbc", feature = "tdes"))]
 fn cbc_decrypt<C>(key: &[u8], iv: &[u8], buffer: &mut [u8]) -> Result<()>
 where
     C: BlockDecryptMut + BlockCipher + KeyInit,
@@ -445,7 +443,7 @@ where
     Ok(())
 }
 
-#[cfg(feature = "aes-ctr")]
+// #[cfg(feature = "aes-ctr")]
 fn ctr_encrypt<C>(key: &[u8], iv: &[u8], buffer: &mut [u8]) -> Result<()>
 where
     C: StreamCipherCore + KeyIvInit,

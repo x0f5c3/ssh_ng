@@ -57,7 +57,7 @@ impl Encode for DsaPublicKey {
     }
 }
 
-#[cfg(feature = "dsa")]
+// #[cfg(feature = "dsa")]
 impl TryFrom<DsaPublicKey> for VerifyingKey {
     type Error = Error;
 
@@ -66,7 +66,7 @@ impl TryFrom<DsaPublicKey> for VerifyingKey {
     }
 }
 
-#[cfg(feature = "dsa")]
+// #[cfg(feature = "dsa")]
 impl TryFrom<&DsaPublicKey> for VerifyingKey {
     type Error = Error;
 
@@ -82,7 +82,7 @@ impl TryFrom<&DsaPublicKey> for VerifyingKey {
     }
 }
 
-#[cfg(feature = "dsa")]
+// #[cfg(feature = "dsa")]
 impl TryFrom<VerifyingKey> for DsaPublicKey {
     type Error = Error;
 
@@ -91,7 +91,7 @@ impl TryFrom<VerifyingKey> for DsaPublicKey {
     }
 }
 
-#[cfg(feature = "dsa")]
+// #[cfg(feature = "dsa")]
 impl TryFrom<&VerifyingKey> for DsaPublicKey {
     type Error = Error;
 

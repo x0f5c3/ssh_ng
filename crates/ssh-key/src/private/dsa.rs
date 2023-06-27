@@ -86,7 +86,7 @@ impl Drop for DsaPrivateKey {
     }
 }
 
-#[cfg(feature = "dsa")]
+// #[cfg(feature = "dsa")]
 impl TryFrom<DsaPrivateKey> for dsa::BigUint {
     type Error = Error;
 
@@ -95,7 +95,7 @@ impl TryFrom<DsaPrivateKey> for dsa::BigUint {
     }
 }
 
-#[cfg(feature = "dsa")]
+// #[cfg(feature = "dsa")]
 impl TryFrom<&DsaPrivateKey> for dsa::BigUint {
     type Error = Error;
 
@@ -104,7 +104,7 @@ impl TryFrom<&DsaPrivateKey> for dsa::BigUint {
     }
 }
 
-#[cfg(feature = "dsa")]
+// #[cfg(feature = "dsa")]
 impl TryFrom<dsa::SigningKey> for DsaPrivateKey {
     type Error = Error;
 
@@ -113,7 +113,7 @@ impl TryFrom<dsa::SigningKey> for DsaPrivateKey {
     }
 }
 
-#[cfg(feature = "dsa")]
+// #[cfg(feature = "dsa")]
 impl TryFrom<&dsa::SigningKey> for DsaPrivateKey {
     type Error = Error;
 
@@ -203,7 +203,7 @@ impl fmt::Debug for DsaKeypair {
     }
 }
 
-#[cfg(feature = "dsa")]
+// #[cfg(feature = "dsa")]
 impl TryFrom<DsaKeypair> for dsa::SigningKey {
     type Error = Error;
 
@@ -212,7 +212,7 @@ impl TryFrom<DsaKeypair> for dsa::SigningKey {
     }
 }
 
-#[cfg(feature = "dsa")]
+// #[cfg(feature = "dsa")]
 impl TryFrom<&DsaKeypair> for dsa::SigningKey {
     type Error = Error;
 
@@ -224,7 +224,7 @@ impl TryFrom<&DsaKeypair> for dsa::SigningKey {
     }
 }
 
-#[cfg(feature = "dsa")]
+// #[cfg(feature = "dsa")]
 impl TryFrom<dsa::SigningKey> for DsaKeypair {
     type Error = Error;
 
@@ -233,7 +233,7 @@ impl TryFrom<dsa::SigningKey> for DsaKeypair {
     }
 }
 
-#[cfg(feature = "dsa")]
+// #[cfg(feature = "dsa")]
 impl TryFrom<&dsa::SigningKey> for DsaKeypair {
     type Error = Error;
 

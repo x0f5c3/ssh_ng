@@ -5,7 +5,7 @@ use core::fmt;
 use core::fmt::Formatter;
 use encoding::{Decode, Encode, Reader, Writer};
 
-#[cfg(feature = "std")]
+// #[cfg(feature = "std")]
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 /// Maximum allowed value for a Unix timestamp:
@@ -23,7 +23,7 @@ pub(super) struct UnixTime {
     secs: u64,
 
     /// System time corresponding to this Unix timestamp
-    #[cfg(feature = "std")]
+    // #[cfg(feature = "std")]
     time: SystemTime,
 }
 
@@ -46,7 +46,7 @@ impl UnixTime {
     /// This version requires `std` and ensures there's a valid `SystemTime`
     /// representation with an infallible conversion (which also improves the
     /// `Debug` output)
-    #[cfg(feature = "std")]
+    // #[cfg(feature = "std")]
     pub fn new(secs: u64) -> Result<Self> {
         if secs > MAX_SECS {
             return Err(Error::Time);
@@ -90,7 +90,7 @@ impl From<UnixTime> for u64 {
     }
 }
 
-#[cfg(feature = "std")]
+// #[cfg(feature = "std")]
 impl From<UnixTime> for SystemTime {
     fn from(unix_time: UnixTime) -> SystemTime {
         unix_time.time
@@ -105,7 +105,7 @@ impl TryFrom<u64> for UnixTime {
     }
 }
 
-#[cfg(feature = "std")]
+// #[cfg(feature = "std")]
 impl TryFrom<SystemTime> for UnixTime {
     type Error = Error;
 

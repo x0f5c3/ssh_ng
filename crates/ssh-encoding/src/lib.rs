@@ -17,10 +17,10 @@
     unused_qualifications
 )]
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 #[macro_use]
 extern crate alloc;
-#[cfg(feature = "std")]
+// #[cfg(feature = "std")]
 extern crate std;
 
 mod checked;
@@ -41,18 +41,18 @@ pub use crate::{
     writer::Writer,
 };
 
-#[cfg(feature = "base64")]
+// #[cfg(feature = "base64")]
 pub use {
     crate::{reader::Base64Reader, writer::Base64Writer},
     base64,
 };
 
-#[cfg(feature = "pem")]
+// #[cfg(feature = "pem")]
 pub use {
     crate::{decode::DecodePem, encode::EncodePem},
     pem::{self, LineEnding},
 };
 
 /// Line width used by the PEM encoding of OpenSSH documents.
-#[cfg(feature = "pem")]
+// #[cfg(feature = "pem")]
 const PEM_LINE_WIDTH: usize = 70;

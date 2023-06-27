@@ -6,37 +6,37 @@ use hex_literal::hex;
 use ssh_key::{Algorithm, Cipher, Kdf, KdfAlg, PrivateKey};
 
 /// Unencrypted Ed25519 OpenSSH-formatted private key.
-#[cfg(feature = "encryption")]
+// #[cfg(feature = "encryption")]
 const OPENSSH_ED25519_EXAMPLE: &str = include_str!("examples/id_ed25519");
 
 /// AES128-CBC encrypted Ed25519 OpenSSH-formatted private key.
 ///
 /// Plaintext is `OPENSSH_ED25519_EXAMPLE`.
-#[cfg(feature = "encryption")]
+// #[cfg(feature = "encryption")]
 const OPENSSH_AES128_CBC_ED25519_EXAMPLE: &str = include_str!("examples/id_ed25519.aes128-cbc.enc");
 
 /// AES192-CBC encrypted Ed25519 OpenSSH-formatted private key.
 ///
 /// Plaintext is `OPENSSH_ED25519_EXAMPLE`.
-#[cfg(feature = "encryption")]
+// #[cfg(feature = "encryption")]
 const OPENSSH_AES192_CBC_ED25519_EXAMPLE: &str = include_str!("examples/id_ed25519.aes192-cbc.enc");
 
 /// AES256-CBC encrypted Ed25519 OpenSSH-formatted private key.
 ///
 /// Plaintext is `OPENSSH_ED25519_EXAMPLE`.
-#[cfg(feature = "encryption")]
+// #[cfg(feature = "encryption")]
 const OPENSSH_AES256_CBC_ED25519_EXAMPLE: &str = include_str!("examples/id_ed25519.aes256-cbc.enc");
 
 /// AES128-CTR encrypted Ed25519 OpenSSH-formatted private key.
 ///
 /// Plaintext is `OPENSSH_ED25519_EXAMPLE`.
-#[cfg(feature = "encryption")]
+// #[cfg(feature = "encryption")]
 const OPENSSH_AES128_CTR_ED25519_EXAMPLE: &str = include_str!("examples/id_ed25519.aes128-ctr.enc");
 
 /// AES192-CTR encrypted Ed25519 OpenSSH-formatted private key.
 ///
 /// Plaintext is `OPENSSH_ED25519_EXAMPLE`.
-#[cfg(feature = "encryption")]
+// #[cfg(feature = "encryption")]
 const OPENSSH_AES192_CTR_ED25519_EXAMPLE: &str = include_str!("examples/id_ed25519.aes192-ctr.enc");
 
 /// AES256-CTR encrypted Ed25519 OpenSSH-formatted private key.
@@ -47,7 +47,7 @@ const OPENSSH_AES256_CTR_ED25519_EXAMPLE: &str = include_str!("examples/id_ed255
 /// AES256-GCM encrypted Ed25519 OpenSSH-formatted private key.
 ///
 /// Plaintext is `OPENSSH_ED25519_EXAMPLE`.
-#[cfg(feature = "encryption")]
+// #[cfg(feature = "encryption")]
 const OPENSSH_AES128_GCM_ED25519_EXAMPLE: &str = include_str!("examples/id_ed25519.aes128-gcm.enc");
 
 /// AES256-GCM encrypted Ed25519 OpenSSH-formatted private key.
@@ -67,7 +67,7 @@ const OPENSSH_CHACHA20_POLY1305_ED25519_EXAMPLE: &str =
 const OPENSSH_3DES_CBC_ED25519_EXAMPLE: &str = include_str!("examples/id_ed25519.3des-cbc.enc");
 
 /// Bad password; don't actually use outside tests!
-#[cfg(feature = "encryption")]
+// #[cfg(feature = "encryption")]
 const PASSWORD: &[u8] = b"hunter42";
 
 #[test]
@@ -154,7 +154,7 @@ fn decode_openssh_3des_cbc() {
     );
 }
 
-#[cfg(feature = "encryption")]
+// #[cfg(feature = "encryption")]
 #[test]
 fn decrypt_openssh_aes128_ctr() {
     let key_enc = PrivateKey::from_openssh(OPENSSH_AES128_CTR_ED25519_EXAMPLE).unwrap();
@@ -166,7 +166,7 @@ fn decrypt_openssh_aes128_ctr() {
     );
 }
 
-#[cfg(feature = "encryption")]
+// #[cfg(feature = "encryption")]
 #[test]
 fn decrypt_openssh_aes192_ctr() {
     let key_enc = PrivateKey::from_openssh(OPENSSH_AES192_CTR_ED25519_EXAMPLE).unwrap();
@@ -178,7 +178,7 @@ fn decrypt_openssh_aes192_ctr() {
     );
 }
 
-#[cfg(feature = "encryption")]
+// #[cfg(feature = "encryption")]
 #[test]
 fn decrypt_openssh_aes256_ctr() {
     let key_enc = PrivateKey::from_openssh(OPENSSH_AES256_CTR_ED25519_EXAMPLE).unwrap();
@@ -190,7 +190,7 @@ fn decrypt_openssh_aes256_ctr() {
     );
 }
 
-#[cfg(feature = "encryption")]
+// #[cfg(feature = "encryption")]
 #[test]
 fn decrypt_openssh_aes128_cbc() {
     let key_enc = PrivateKey::from_openssh(OPENSSH_AES128_CBC_ED25519_EXAMPLE).unwrap();
@@ -202,7 +202,7 @@ fn decrypt_openssh_aes128_cbc() {
     );
 }
 
-#[cfg(feature = "encryption")]
+// #[cfg(feature = "encryption")]
 #[test]
 fn decrypt_openssh_aes192_cbc() {
     let key_enc = PrivateKey::from_openssh(OPENSSH_AES192_CBC_ED25519_EXAMPLE).unwrap();
@@ -214,7 +214,7 @@ fn decrypt_openssh_aes192_cbc() {
     );
 }
 
-#[cfg(feature = "encryption")]
+// #[cfg(feature = "encryption")]
 #[test]
 fn decrypt_openssh_aes256_cbc() {
     let key_enc = PrivateKey::from_openssh(OPENSSH_AES256_CBC_ED25519_EXAMPLE).unwrap();
@@ -226,7 +226,7 @@ fn decrypt_openssh_aes256_cbc() {
     );
 }
 
-#[cfg(feature = "encryption")]
+// #[cfg(feature = "encryption")]
 #[test]
 fn decrypt_openssh_aes128_gcm() {
     let key_enc = PrivateKey::from_openssh(OPENSSH_AES128_GCM_ED25519_EXAMPLE).unwrap();
@@ -238,7 +238,7 @@ fn decrypt_openssh_aes128_gcm() {
     );
 }
 
-#[cfg(feature = "encryption")]
+// #[cfg(feature = "encryption")]
 #[test]
 fn decrypt_openssh_aes256_gcm() {
     let key_enc = PrivateKey::from_openssh(OPENSSH_AES256_GCM_ED25519_EXAMPLE).unwrap();
@@ -250,7 +250,7 @@ fn decrypt_openssh_aes256_gcm() {
     );
 }
 
-#[cfg(feature = "encryption")]
+// #[cfg(feature = "encryption")]
 #[test]
 fn decrypt_openssh_chacha20_poly1305() {
     let key_enc = PrivateKey::from_openssh(OPENSSH_CHACHA20_POLY1305_ED25519_EXAMPLE).unwrap();
@@ -262,7 +262,7 @@ fn decrypt_openssh_chacha20_poly1305() {
     );
 }
 
-#[cfg(feature = "tdes")]
+// #[cfg(feature = "tdes")]
 #[test]
 fn decrypt_openssh_3des() {
     let key_enc = PrivateKey::from_openssh(OPENSSH_3DES_CBC_ED25519_EXAMPLE).unwrap();

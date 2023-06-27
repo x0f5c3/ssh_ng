@@ -2,23 +2,23 @@
 //!
 //! Support for decoding SSH public keys from the OpenSSH file format.
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 mod dsa;
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 mod ecdsa;
 mod ed25519;
 mod key_data;
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 mod rsa;
 mod sk;
 mod ssh_format;
 
 pub use self::{ed25519::Ed25519PublicKey, key_data::KeyData, sk::SkEd25519};
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 pub use self::{dsa::DsaPublicKey, rsa::RsaPublicKey};
 
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 pub use self::{ecdsa::EcdsaPublicKey, sk::SkEcdsaSha2NistP256};
 
 pub(crate) use self::ssh_format::SshFormat;
@@ -27,7 +27,7 @@ use crate::{Algorithm, Error, Fingerprint, HashAlg, Result};
 use core::str::FromStr;
 use encoding::{Base64Reader, Decode, Reader};
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 use {
     crate::SshSig,
     alloc::{
@@ -41,7 +41,7 @@ use {
 #[cfg(all(feature = "alloc", feature = "serde"))]
 use serde::{de, ser};
 
-#[cfg(feature = "std")]
+// #[cfg(feature = "std")]
 use std::{fs, path::Path};
 
 /// SSH public key.
@@ -78,7 +78,7 @@ pub struct PublicKey {
     pub(crate) key_data: KeyData,
 
     /// Comment on the key (e.g. email address)
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     pub(crate) comment: String,
 }
 
@@ -86,7 +86,7 @@ impl PublicKey {
     /// Create a new public key with the given comment.
     ///
     /// On `no_std` platforms, use `PublicKey::from(key_data)` instead.
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     pub fn new(key_data: KeyData, comment: impl Into<String>) -> Self {
         Self {
             key_data,
@@ -113,7 +113,7 @@ impl PublicKey {
 
         let public_key = Self {
             key_data,
-            #[cfg(feature = "alloc")]
+            // #[cfg(feature = "alloc")]
             comment: encapsulation.comment.to_owned(),
         };
 
@@ -139,13 +139,13 @@ impl PublicKey {
 
     /// Encode an OpenSSH-formatted public key, allocating a [`String`] for
     /// the result.
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     pub fn to_openssh(&self) -> Result<String> {
         SshFormat::encode_string(self.algorithm().as_str(), &self.key_data, self.comment())
     }
 
     /// Serialize SSH public key as raw bytes.
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     pub fn to_bytes(&self) -> Result<Vec<u8>> {
         let mut public_key_bytes = Vec::new();
         self.key_data.encode(&mut public_key_bytes)?;
@@ -165,7 +165,7 @@ impl PublicKey {
     /// See [PROTOCOL.sshsig] for more information.
     ///
     /// [PROTOCOL.sshsig]: https://cvsweb.openbsd.org/src/usr.bin/ssh/PROTOCOL.sshsig?annotate=HEAD
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     pub fn verify(&self, namespace: &str, msg: &[u8], signature: &SshSig) -> Result<()> {
         if self.key_data() != signature.public_key() {
             return Err(Error::PublicKey);
@@ -179,14 +179,14 @@ impl PublicKey {
     }
 
     /// Read public key from an OpenSSH-formatted file.
-    #[cfg(feature = "std")]
+    // #[cfg(feature = "std")]
     pub fn read_openssh_file(path: &Path) -> Result<Self> {
         let input = fs::read_to_string(path)?;
         Self::from_openssh(&input)
     }
 
     /// Write public key as an OpenSSH-formatted file.
-    #[cfg(feature = "std")]
+    // #[cfg(feature = "std")]
     pub fn write_openssh_file(&self, path: &Path) -> Result<()> {
         let encoded = self.to_openssh()?;
         fs::write(path, encoded.as_bytes())?;
@@ -205,7 +205,7 @@ impl PublicKey {
     }
 
     /// Comment on the key (e.g. email address).
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     pub fn comment(&self) -> &str {
         &self.comment
     }
@@ -223,7 +223,7 @@ impl PublicKey {
     }
 
     /// Set the comment on the key.
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     pub fn set_comment(&mut self, comment: impl Into<String>) {
         self.comment = comment.into();
     }
@@ -238,7 +238,7 @@ impl PublicKey {
     }
 
     /// Decode comment (e.g. email address)
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     pub(crate) fn decode_comment(&mut self, reader: &mut impl Reader) -> Result<()> {
         self.comment = String::decode(reader)?;
         Ok(())
@@ -249,7 +249,7 @@ impl From<KeyData> for PublicKey {
     fn from(key_data: KeyData) -> PublicKey {
         PublicKey {
             key_data,
-            #[cfg(feature = "alloc")]
+            // #[cfg(feature = "alloc")]
             comment: String::new(),
         }
     }
@@ -267,14 +267,14 @@ impl From<&PublicKey> for KeyData {
     }
 }
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 impl From<DsaPublicKey> for PublicKey {
     fn from(public_key: DsaPublicKey) -> PublicKey {
         KeyData::from(public_key).into()
     }
 }
 
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 impl From<EcdsaPublicKey> for PublicKey {
     fn from(public_key: EcdsaPublicKey) -> PublicKey {
         KeyData::from(public_key).into()
@@ -287,14 +287,14 @@ impl From<Ed25519PublicKey> for PublicKey {
     }
 }
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 impl From<RsaPublicKey> for PublicKey {
     fn from(public_key: RsaPublicKey) -> PublicKey {
         KeyData::from(public_key).into()
     }
 }
 
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 impl From<SkEcdsaSha2NistP256> for PublicKey {
     fn from(public_key: SkEcdsaSha2NistP256) -> PublicKey {
         KeyData::from(public_key).into()
@@ -315,7 +315,7 @@ impl FromStr for PublicKey {
     }
 }
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 impl ToString for PublicKey {
     fn to_string(&self) -> String {
         self.to_openssh().expect("SSH public key encoding error")

@@ -3,7 +3,7 @@
 use hex_literal::hex;
 use ssh_key::{Algorithm, Cipher, KdfAlg, PrivateKey};
 
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 use ssh_key::EcdsaCurve;
 
 #[cfg(all(feature = "alloc"))]
@@ -16,33 +16,33 @@ use {
 };
 
 /// DSA OpenSSH-formatted public key
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 const OPENSSH_DSA_EXAMPLE: &str = include_str!("examples/id_dsa_1024");
 
 /// ECDSA/P-256 OpenSSH-formatted public key
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 const OPENSSH_ECDSA_P256_EXAMPLE: &str = include_str!("examples/id_ecdsa_p256");
 
 /// ECDSA/P-384 OpenSSH-formatted public key
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 const OPENSSH_ECDSA_P384_EXAMPLE: &str = include_str!("examples/id_ecdsa_p384");
 
 /// ECDSA/P-521 OpenSSH-formatted public key
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 const OPENSSH_ECDSA_P521_EXAMPLE: &str = include_str!("examples/id_ecdsa_p521");
 
 /// Ed25519 OpenSSH-formatted private key
 const OPENSSH_ED25519_EXAMPLE: &str = include_str!("examples/id_ed25519");
 
 /// RSA (3072-bit) OpenSSH-formatted public key
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 const OPENSSH_RSA_3072_EXAMPLE: &str = include_str!("examples/id_rsa_3072");
 
 /// RSA (4096-bit) OpenSSH-formatted public key
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 const OPENSSH_RSA_4096_EXAMPLE: &str = include_str!("examples/id_rsa_4096");
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 #[test]
 fn decode_dsa_openssh() {
     let key = PrivateKey::from_openssh(OPENSSH_DSA_EXAMPLE).unwrap();
@@ -87,7 +87,7 @@ fn decode_dsa_openssh() {
     assert_eq!("user@example.com", key.comment());
 }
 
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 #[test]
 fn decode_ecdsa_p256_openssh() {
     let key = PrivateKey::from_openssh(OPENSSH_ECDSA_P256_EXAMPLE).unwrap();
@@ -114,12 +114,11 @@ fn decode_ecdsa_p256_openssh() {
         &hex!("ca78a64774bfae37123224937f0398960189707aca0a8645ceb4359c423ba079"),
         ecdsa_keypair.private_key_bytes(),
     );
-
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     assert_eq!("user@example.com", key.comment());
 }
 
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 #[test]
 fn decode_ecdsa_p384_openssh() {
     let key = PrivateKey::from_openssh(OPENSSH_ECDSA_P384_EXAMPLE).unwrap();
@@ -150,12 +149,11 @@ fn decode_ecdsa_p384_openssh() {
         ),
         ecdsa_keypair.private_key_bytes(),
     );
-
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     assert_eq!("user@example.com", key.comment());
 }
 
-#[cfg(feature = "ecdsa")]
+// #[cfg(feature = "ecdsa")]
 #[test]
 fn decode_ecdsa_p521_openssh() {
     let key = PrivateKey::from_openssh(OPENSSH_ECDSA_P521_EXAMPLE).unwrap();
@@ -187,8 +185,7 @@ fn decode_ecdsa_p521_openssh() {
         ),
         ecdsa_keypair.private_key_bytes(),
     );
-
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     assert_eq!("user@example.com", key.comment());
 }
 
@@ -209,12 +206,11 @@ fn decode_ed25519_openssh() {
         &hex!("b606c222d10c16dae16c70a4d45173472ec617e05c656920d26e56c08fb591ed"),
         ed25519_keypair.private.as_ref(),
     );
-
-    #[cfg(feature = "alloc")]
+    // #[cfg(feature = "alloc")]
     assert_eq!(key.comment(), "user@example.com");
 }
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 #[test]
 fn decode_rsa_3072_openssh() {
     let key = PrivateKey::from_openssh(OPENSSH_RSA_3072_EXAMPLE).unwrap();
@@ -286,7 +282,7 @@ fn decode_rsa_3072_openssh() {
     assert_eq!("user@example.com", key.comment());
 }
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 #[test]
 fn decode_rsa_4096_openssh() {
     let key = PrivateKey::from_openssh(OPENSSH_RSA_4096_EXAMPLE).unwrap();
@@ -418,8 +414,7 @@ fn encoding_test(private_key: &str) {
     let pem = key.to_openssh(LineEnding::LF).unwrap();
     let key2 = PrivateKey::from_openssh(&*pem).unwrap();
     assert_eq!(key, key2);
-
-    #[cfg(feature = "std")]
+    // #[cfg(feature = "std")]
     encoding_integration_test(key)
 }
 
